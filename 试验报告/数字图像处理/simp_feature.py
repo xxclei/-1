@@ -7,7 +7,7 @@ import os
 import matplotlib.pyplot as plt
 
 # 获取目标文件夹路径
-input_folder = '/home/xclei/桌面/试验报告/数字图像处理/课程设计图像（视频）素材/感兴趣目标提取'  # 替换为你的图片文件夹路径
+input_folder = 'project\\1'  # 替换为你的图片文件夹路径
 output_folder = 'output_folder2'  # 替换为输出文件夹路径
 
 if not os.path.exists(output_folder):
@@ -15,7 +15,7 @@ if not os.path.exists(output_folder):
 
 # 读取文件夹中的所有图片文件
 image_files = [f for f in os.listdir(input_folder) if f.endswith(('.jpg', '.png', '.jpeg'))]
-image_files = sorted(image_files)[:10]  # 只处理前10张图片
+image_files = sorted(image_files)[:11]  # 只处理前10张图片
 
 # 提取每个超像素的特征
 def extract_features(image, segments):
