@@ -1,0 +1,52 @@
+id_list --> a
+type --> int
+variable_declaration --> var id_list type
+statement --> variable_declaration
+id_list --> b
+type --> int
+variable_declaration --> var id_list type
+statement --> variable_declaration
+expression --> 2
+assignment --> a = expression
+statement --> assignment
+expression --> 3
+assignment --> b = expression
+statement --> assignment
+expression --> a
+expression --> b
+condition --> expression == expression
+expression --> 3
+assignment --> a = expression
+statement --> assignment
+statement_list --> ε
+statement_list --> statement statement_list
+statement --> print_statement
+statement_list --> ε
+statement_list --> statement statement_list
+if_statement --> if ( condition ) { statement_list } else { statement_list }
+statement --> if_statement
+expression --> a
+expression --> 1
+expression --> expression + expression
+assignment --> a = expression
+statement --> assignment
+expression --> a
+expression --> b
+condition --> expression == expression
+statement --> print_statement
+statement_list --> ε
+statement_list --> statement statement_list
+statement --> print_statement
+statement_list --> ε
+statement_list --> statement statement_list
+if_statement --> if ( condition ) { statement_list } else { statement_list }
+statement --> if_statement
+statement_list --> ε
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+program --> statement_list

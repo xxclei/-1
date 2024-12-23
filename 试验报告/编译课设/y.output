@@ -1,0 +1,1093 @@
+语法
+
+    0 $accept: program $end
+
+    1 program: statement_list
+
+    2 statement_list: statement statement_list
+    3               | ε
+
+    4 statement: variable_declaration
+    5          | assignment
+    6          | if_statement
+    7          | loop_statement
+    8          | print_statement
+
+    9 variable_declaration: VAR id_list type
+   10                     | VAR id_list type ASSIGN expression
+
+   11 id_list: ID
+   12        | ID COMMA id_list
+
+   13 type: INT
+   14     | DOUBLE
+   15     | STRING
+   16     | BOOL
+   17     | INT array_dimensions
+   18     | DOUBLE array_dimensions
+
+   19 array_dimensions: LBRACKET NUMBER RBRACKET
+   20                 | LBRACKET NUMBER RBRACKET array_dimensions
+
+   21 assignment: ID ASSIGN expression
+
+   22 if_statement: IF LPAREN condition RPAREN LBRACE statement_list RBRACE
+   23             | IF LPAREN condition RPAREN LBRACE statement_list RBRACE ELSE LBRACE statement_list RBRACE
+
+   24 loop_statement: FOR ID COLON ID LBRACE statement_list RBRACE
+   25               | WHILE LPAREN condition RPAREN LBRACE statement_list RBRACE
+
+   26 condition: expression EQ expression
+   27          | expression NE expression
+   28          | expression LT expression
+   29          | expression LE expression
+   30          | expression GT expression
+   31          | expression GE expression
+
+   32 expression: NUMBER
+   33           | ID
+   34           | LPAREN expression RPAREN
+   35           | expression PLUS expression
+   36           | expression MINUS expression
+   37           | expression MULT expression
+   38           | expression DIV expression
+
+   39 print_statement: PRINT LPAREN STR RPAREN
+   40                | PRINT LPAREN expression RPAREN
+
+
+终结语词，附有它们出现处的规则
+
+    $end (0) 0
+    error (256)
+    ID <id> (258) 11 12 21 24 33
+    NUMBER <intVal> (259) 19 20 32
+    STR <strVal> (260) 39
+    VAR (261) 9 10
+    IF (262) 22 23
+    ELSE (263) 23
+    FOR (264) 24
+    WHILE (265) 25
+    INT (266) 13 17
+    DOUBLE (267) 14 18
+    STRING (268) 15
+    BOOL (269) 16
+    PLUS (270) 35
+    MINUS (271) 36
+    MULT (272) 37
+    DIV (273) 38
+    ASSIGN (274) 10 21
+    EQ (275) 26
+    NE (276) 27
+    LT (277) 28
+    GT (278) 30
+    LE (279) 29
+    GE (280) 31
+    COLON (281) 24
+    COMMA (282) 12
+    LBRACKET (283) 19 20
+    RBRACKET (284) 19 20
+    LPAREN (285) 22 23 25 34 39 40
+    RPAREN (286) 22 23 25 34 39 40
+    LBRACE (287) 22 23 24 25
+    RBRACE (288) 22 23 24 25
+    PRINT (289) 39 40
+
+
+非终结语词，附有它们出现处的规则
+
+    $accept (35)
+        on left: 0
+    program (36)
+        on left: 1
+        on right: 0
+    statement_list <strVal> (37)
+        on left: 2 3
+        on right: 1 2 22 23 24 25
+    statement (38)
+        on left: 4 5 6 7 8
+        on right: 2
+    variable_declaration (39)
+        on left: 9 10
+        on right: 4
+    id_list <id> (40)
+        on left: 11 12
+        on right: 9 10 12
+    type <id> (41)
+        on left: 13 14 15 16 17 18
+        on right: 9 10
+    array_dimensions <id> (42)
+        on left: 19 20
+        on right: 17 18 20
+    assignment (43)
+        on left: 21
+        on right: 5
+    if_statement <strVal> (44)
+        on left: 22 23
+        on right: 6
+    loop_statement (45)
+        on left: 24 25
+        on right: 7
+    condition <intVal> (46)
+        on left: 26 27 28 29 30 31
+        on right: 22 23 25
+    expression <intVal> (47)
+        on left: 32 33 34 35 36 37 38
+        on right: 10 21 26 27 28 29 30 31 34 35 36 37 38 40
+    print_statement <strVal> (48)
+        on left: 39 40
+        on right: 8
+
+
+状态 0
+
+    0 $accept: • program $end
+
+    ID     偏移，并进入状态 1
+    VAR    偏移，并进入状态 2
+    IF     偏移，并进入状态 3
+    FOR    偏移，并进入状态 4
+    WHILE  偏移，并进入状态 5
+    PRINT  偏移，并进入状态 6
+
+    $default  使用规则 3 以归约 (statement_list)
+
+    program               转到状态 7
+    statement_list        转到状态 8
+    statement             转到状态 9
+    variable_declaration  转到状态 10
+    assignment            转到状态 11
+    if_statement          转到状态 12
+    loop_statement        转到状态 13
+    print_statement       转到状态 14
+
+
+状态 1
+
+   21 assignment: ID • ASSIGN expression
+
+    ASSIGN  偏移，并进入状态 15
+
+
+状态 2
+
+    9 variable_declaration: VAR • id_list type
+   10                     | VAR • id_list type ASSIGN expression
+
+    ID  偏移，并进入状态 16
+
+    id_list  转到状态 17
+
+
+状态 3
+
+   22 if_statement: IF • LPAREN condition RPAREN LBRACE statement_list RBRACE
+   23             | IF • LPAREN condition RPAREN LBRACE statement_list RBRACE ELSE LBRACE statement_list RBRACE
+
+    LPAREN  偏移，并进入状态 18
+
+
+状态 4
+
+   24 loop_statement: FOR • ID COLON ID LBRACE statement_list RBRACE
+
+    ID  偏移，并进入状态 19
+
+
+状态 5
+
+   25 loop_statement: WHILE • LPAREN condition RPAREN LBRACE statement_list RBRACE
+
+    LPAREN  偏移，并进入状态 20
+
+
+状态 6
+
+   39 print_statement: PRINT • LPAREN STR RPAREN
+   40                | PRINT • LPAREN expression RPAREN
+
+    LPAREN  偏移，并进入状态 21
+
+
+状态 7
+
+    0 $accept: program • $end
+
+    $end  偏移，并进入状态 22
+
+
+状态 8
+
+    1 program: statement_list •
+
+    $default  使用规则 1 以归约 (program)
+
+
+状态 9
+
+    2 statement_list: statement • statement_list
+
+    ID     偏移，并进入状态 1
+    VAR    偏移，并进入状态 2
+    IF     偏移，并进入状态 3
+    FOR    偏移，并进入状态 4
+    WHILE  偏移，并进入状态 5
+    PRINT  偏移，并进入状态 6
+
+    $default  使用规则 3 以归约 (statement_list)
+
+    statement_list        转到状态 23
+    statement             转到状态 9
+    variable_declaration  转到状态 10
+    assignment            转到状态 11
+    if_statement          转到状态 12
+    loop_statement        转到状态 13
+    print_statement       转到状态 14
+
+
+状态 10
+
+    4 statement: variable_declaration •
+
+    $default  使用规则 4 以归约 (statement)
+
+
+状态 11
+
+    5 statement: assignment •
+
+    $default  使用规则 5 以归约 (statement)
+
+
+状态 12
+
+    6 statement: if_statement •
+
+    $default  使用规则 6 以归约 (statement)
+
+
+状态 13
+
+    7 statement: loop_statement •
+
+    $default  使用规则 7 以归约 (statement)
+
+
+状态 14
+
+    8 statement: print_statement •
+
+    $default  使用规则 8 以归约 (statement)
+
+
+状态 15
+
+   21 assignment: ID ASSIGN • expression
+
+    ID      偏移，并进入状态 24
+    NUMBER  偏移，并进入状态 25
+    LPAREN  偏移，并进入状态 26
+
+    expression  转到状态 27
+
+
+状态 16
+
+   11 id_list: ID •
+   12        | ID • COMMA id_list
+
+    COMMA  偏移，并进入状态 28
+
+    $default  使用规则 11 以归约 (id_list)
+
+
+状态 17
+
+    9 variable_declaration: VAR id_list • type
+   10                     | VAR id_list • type ASSIGN expression
+
+    INT     偏移，并进入状态 29
+    DOUBLE  偏移，并进入状态 30
+    STRING  偏移，并进入状态 31
+    BOOL    偏移，并进入状态 32
+
+    type  转到状态 33
+
+
+状态 18
+
+   22 if_statement: IF LPAREN • condition RPAREN LBRACE statement_list RBRACE
+   23             | IF LPAREN • condition RPAREN LBRACE statement_list RBRACE ELSE LBRACE statement_list RBRACE
+
+    ID      偏移，并进入状态 24
+    NUMBER  偏移，并进入状态 25
+    LPAREN  偏移，并进入状态 26
+
+    condition   转到状态 34
+    expression  转到状态 35
+
+
+状态 19
+
+   24 loop_statement: FOR ID • COLON ID LBRACE statement_list RBRACE
+
+    COLON  偏移，并进入状态 36
+
+
+状态 20
+
+   25 loop_statement: WHILE LPAREN • condition RPAREN LBRACE statement_list RBRACE
+
+    ID      偏移，并进入状态 24
+    NUMBER  偏移，并进入状态 25
+    LPAREN  偏移，并进入状态 26
+
+    condition   转到状态 37
+    expression  转到状态 35
+
+
+状态 21
+
+   39 print_statement: PRINT LPAREN • STR RPAREN
+   40                | PRINT LPAREN • expression RPAREN
+
+    ID      偏移，并进入状态 24
+    NUMBER  偏移，并进入状态 25
+    STR     偏移，并进入状态 38
+    LPAREN  偏移，并进入状态 26
+
+    expression  转到状态 39
+
+
+状态 22
+
+    0 $accept: program $end •
+
+    $default  接受
+
+
+状态 23
+
+    2 statement_list: statement statement_list •
+
+    $default  使用规则 2 以归约 (statement_list)
+
+
+状态 24
+
+   33 expression: ID •
+
+    $default  使用规则 33 以归约 (expression)
+
+
+状态 25
+
+   32 expression: NUMBER •
+
+    $default  使用规则 32 以归约 (expression)
+
+
+状态 26
+
+   34 expression: LPAREN • expression RPAREN
+
+    ID      偏移，并进入状态 24
+    NUMBER  偏移，并进入状态 25
+    LPAREN  偏移，并进入状态 26
+
+    expression  转到状态 40
+
+
+状态 27
+
+   21 assignment: ID ASSIGN expression •
+   35 expression: expression • PLUS expression
+   36           | expression • MINUS expression
+   37           | expression • MULT expression
+   38           | expression • DIV expression
+
+    PLUS   偏移，并进入状态 41
+    MINUS  偏移，并进入状态 42
+    MULT   偏移，并进入状态 43
+    DIV    偏移，并进入状态 44
+
+    $default  使用规则 21 以归约 (assignment)
+
+
+状态 28
+
+   12 id_list: ID COMMA • id_list
+
+    ID  偏移，并进入状态 16
+
+    id_list  转到状态 45
+
+
+状态 29
+
+   13 type: INT •
+   17     | INT • array_dimensions
+
+    LBRACKET  偏移，并进入状态 46
+
+    $default  使用规则 13 以归约 (type)
+
+    array_dimensions  转到状态 47
+
+
+状态 30
+
+   14 type: DOUBLE •
+   18     | DOUBLE • array_dimensions
+
+    LBRACKET  偏移，并进入状态 46
+
+    $default  使用规则 14 以归约 (type)
+
+    array_dimensions  转到状态 48
+
+
+状态 31
+
+   15 type: STRING •
+
+    $default  使用规则 15 以归约 (type)
+
+
+状态 32
+
+   16 type: BOOL •
+
+    $default  使用规则 16 以归约 (type)
+
+
+状态 33
+
+    9 variable_declaration: VAR id_list type •
+   10                     | VAR id_list type • ASSIGN expression
+
+    ASSIGN  偏移，并进入状态 49
+
+    $default  使用规则 9 以归约 (variable_declaration)
+
+
+状态 34
+
+   22 if_statement: IF LPAREN condition • RPAREN LBRACE statement_list RBRACE
+   23             | IF LPAREN condition • RPAREN LBRACE statement_list RBRACE ELSE LBRACE statement_list RBRACE
+
+    RPAREN  偏移，并进入状态 50
+
+
+状态 35
+
+   26 condition: expression • EQ expression
+   27          | expression • NE expression
+   28          | expression • LT expression
+   29          | expression • LE expression
+   30          | expression • GT expression
+   31          | expression • GE expression
+   35 expression: expression • PLUS expression
+   36           | expression • MINUS expression
+   37           | expression • MULT expression
+   38           | expression • DIV expression
+
+    PLUS   偏移，并进入状态 41
+    MINUS  偏移，并进入状态 42
+    MULT   偏移，并进入状态 43
+    DIV    偏移，并进入状态 44
+    EQ     偏移，并进入状态 51
+    NE     偏移，并进入状态 52
+    LT     偏移，并进入状态 53
+    GT     偏移，并进入状态 54
+    LE     偏移，并进入状态 55
+    GE     偏移，并进入状态 56
+
+
+状态 36
+
+   24 loop_statement: FOR ID COLON • ID LBRACE statement_list RBRACE
+
+    ID  偏移，并进入状态 57
+
+
+状态 37
+
+   25 loop_statement: WHILE LPAREN condition • RPAREN LBRACE statement_list RBRACE
+
+    RPAREN  偏移，并进入状态 58
+
+
+状态 38
+
+   39 print_statement: PRINT LPAREN STR • RPAREN
+
+    RPAREN  偏移，并进入状态 59
+
+
+状态 39
+
+   35 expression: expression • PLUS expression
+   36           | expression • MINUS expression
+   37           | expression • MULT expression
+   38           | expression • DIV expression
+   40 print_statement: PRINT LPAREN expression • RPAREN
+
+    PLUS    偏移，并进入状态 41
+    MINUS   偏移，并进入状态 42
+    MULT    偏移，并进入状态 43
+    DIV     偏移，并进入状态 44
+    RPAREN  偏移，并进入状态 60
+
+
+状态 40
+
+   34 expression: LPAREN expression • RPAREN
+   35           | expression • PLUS expression
+   36           | expression • MINUS expression
+   37           | expression • MULT expression
+   38           | expression • DIV expression
+
+    PLUS    偏移，并进入状态 41
+    MINUS   偏移，并进入状态 42
+    MULT    偏移，并进入状态 43
+    DIV     偏移，并进入状态 44
+    RPAREN  偏移，并进入状态 61
+
+
+状态 41
+
+   35 expression: expression PLUS • expression
+
+    ID      偏移，并进入状态 24
+    NUMBER  偏移，并进入状态 25
+    LPAREN  偏移，并进入状态 26
+
+    expression  转到状态 62
+
+
+状态 42
+
+   36 expression: expression MINUS • expression
+
+    ID      偏移，并进入状态 24
+    NUMBER  偏移，并进入状态 25
+    LPAREN  偏移，并进入状态 26
+
+    expression  转到状态 63
+
+
+状态 43
+
+   37 expression: expression MULT • expression
+
+    ID      偏移，并进入状态 24
+    NUMBER  偏移，并进入状态 25
+    LPAREN  偏移，并进入状态 26
+
+    expression  转到状态 64
+
+
+状态 44
+
+   38 expression: expression DIV • expression
+
+    ID      偏移，并进入状态 24
+    NUMBER  偏移，并进入状态 25
+    LPAREN  偏移，并进入状态 26
+
+    expression  转到状态 65
+
+
+状态 45
+
+   12 id_list: ID COMMA id_list •
+
+    $default  使用规则 12 以归约 (id_list)
+
+
+状态 46
+
+   19 array_dimensions: LBRACKET • NUMBER RBRACKET
+   20                 | LBRACKET • NUMBER RBRACKET array_dimensions
+
+    NUMBER  偏移，并进入状态 66
+
+
+状态 47
+
+   17 type: INT array_dimensions •
+
+    $default  使用规则 17 以归约 (type)
+
+
+状态 48
+
+   18 type: DOUBLE array_dimensions •
+
+    $default  使用规则 18 以归约 (type)
+
+
+状态 49
+
+   10 variable_declaration: VAR id_list type ASSIGN • expression
+
+    ID      偏移，并进入状态 24
+    NUMBER  偏移，并进入状态 25
+    LPAREN  偏移，并进入状态 26
+
+    expression  转到状态 67
+
+
+状态 50
+
+   22 if_statement: IF LPAREN condition RPAREN • LBRACE statement_list RBRACE
+   23             | IF LPAREN condition RPAREN • LBRACE statement_list RBRACE ELSE LBRACE statement_list RBRACE
+
+    LBRACE  偏移，并进入状态 68
+
+
+状态 51
+
+   26 condition: expression EQ • expression
+
+    ID      偏移，并进入状态 24
+    NUMBER  偏移，并进入状态 25
+    LPAREN  偏移，并进入状态 26
+
+    expression  转到状态 69
+
+
+状态 52
+
+   27 condition: expression NE • expression
+
+    ID      偏移，并进入状态 24
+    NUMBER  偏移，并进入状态 25
+    LPAREN  偏移，并进入状态 26
+
+    expression  转到状态 70
+
+
+状态 53
+
+   28 condition: expression LT • expression
+
+    ID      偏移，并进入状态 24
+    NUMBER  偏移，并进入状态 25
+    LPAREN  偏移，并进入状态 26
+
+    expression  转到状态 71
+
+
+状态 54
+
+   30 condition: expression GT • expression
+
+    ID      偏移，并进入状态 24
+    NUMBER  偏移，并进入状态 25
+    LPAREN  偏移，并进入状态 26
+
+    expression  转到状态 72
+
+
+状态 55
+
+   29 condition: expression LE • expression
+
+    ID      偏移，并进入状态 24
+    NUMBER  偏移，并进入状态 25
+    LPAREN  偏移，并进入状态 26
+
+    expression  转到状态 73
+
+
+状态 56
+
+   31 condition: expression GE • expression
+
+    ID      偏移，并进入状态 24
+    NUMBER  偏移，并进入状态 25
+    LPAREN  偏移，并进入状态 26
+
+    expression  转到状态 74
+
+
+状态 57
+
+   24 loop_statement: FOR ID COLON ID • LBRACE statement_list RBRACE
+
+    LBRACE  偏移，并进入状态 75
+
+
+状态 58
+
+   25 loop_statement: WHILE LPAREN condition RPAREN • LBRACE statement_list RBRACE
+
+    LBRACE  偏移，并进入状态 76
+
+
+状态 59
+
+   39 print_statement: PRINT LPAREN STR RPAREN •
+
+    $default  使用规则 39 以归约 (print_statement)
+
+
+状态 60
+
+   40 print_statement: PRINT LPAREN expression RPAREN •
+
+    $default  使用规则 40 以归约 (print_statement)
+
+
+状态 61
+
+   34 expression: LPAREN expression RPAREN •
+
+    $default  使用规则 34 以归约 (expression)
+
+
+状态 62
+
+   35 expression: expression • PLUS expression
+   35           | expression PLUS expression •
+   36           | expression • MINUS expression
+   37           | expression • MULT expression
+   38           | expression • DIV expression
+
+    MULT  偏移，并进入状态 43
+    DIV   偏移，并进入状态 44
+
+    $default  使用规则 35 以归约 (expression)
+
+
+状态 63
+
+   35 expression: expression • PLUS expression
+   36           | expression • MINUS expression
+   36           | expression MINUS expression •
+   37           | expression • MULT expression
+   38           | expression • DIV expression
+
+    MULT  偏移，并进入状态 43
+    DIV   偏移，并进入状态 44
+
+    $default  使用规则 36 以归约 (expression)
+
+
+状态 64
+
+   35 expression: expression • PLUS expression
+   36           | expression • MINUS expression
+   37           | expression • MULT expression
+   37           | expression MULT expression •
+   38           | expression • DIV expression
+
+    $default  使用规则 37 以归约 (expression)
+
+
+状态 65
+
+   35 expression: expression • PLUS expression
+   36           | expression • MINUS expression
+   37           | expression • MULT expression
+   38           | expression • DIV expression
+   38           | expression DIV expression •
+
+    $default  使用规则 38 以归约 (expression)
+
+
+状态 66
+
+   19 array_dimensions: LBRACKET NUMBER • RBRACKET
+   20                 | LBRACKET NUMBER • RBRACKET array_dimensions
+
+    RBRACKET  偏移，并进入状态 77
+
+
+状态 67
+
+   10 variable_declaration: VAR id_list type ASSIGN expression •
+   35 expression: expression • PLUS expression
+   36           | expression • MINUS expression
+   37           | expression • MULT expression
+   38           | expression • DIV expression
+
+    PLUS   偏移，并进入状态 41
+    MINUS  偏移，并进入状态 42
+    MULT   偏移，并进入状态 43
+    DIV    偏移，并进入状态 44
+
+    $default  使用规则 10 以归约 (variable_declaration)
+
+
+状态 68
+
+   22 if_statement: IF LPAREN condition RPAREN LBRACE • statement_list RBRACE
+   23             | IF LPAREN condition RPAREN LBRACE • statement_list RBRACE ELSE LBRACE statement_list RBRACE
+
+    ID     偏移，并进入状态 1
+    VAR    偏移，并进入状态 2
+    IF     偏移，并进入状态 3
+    FOR    偏移，并进入状态 4
+    WHILE  偏移，并进入状态 5
+    PRINT  偏移，并进入状态 6
+
+    $default  使用规则 3 以归约 (statement_list)
+
+    statement_list        转到状态 78
+    statement             转到状态 9
+    variable_declaration  转到状态 10
+    assignment            转到状态 11
+    if_statement          转到状态 12
+    loop_statement        转到状态 13
+    print_statement       转到状态 14
+
+
+状态 69
+
+   26 condition: expression EQ expression •
+   35 expression: expression • PLUS expression
+   36           | expression • MINUS expression
+   37           | expression • MULT expression
+   38           | expression • DIV expression
+
+    PLUS   偏移，并进入状态 41
+    MINUS  偏移，并进入状态 42
+    MULT   偏移，并进入状态 43
+    DIV    偏移，并进入状态 44
+
+    $default  使用规则 26 以归约 (condition)
+
+
+状态 70
+
+   27 condition: expression NE expression •
+   35 expression: expression • PLUS expression
+   36           | expression • MINUS expression
+   37           | expression • MULT expression
+   38           | expression • DIV expression
+
+    PLUS   偏移，并进入状态 41
+    MINUS  偏移，并进入状态 42
+    MULT   偏移，并进入状态 43
+    DIV    偏移，并进入状态 44
+
+    $default  使用规则 27 以归约 (condition)
+
+
+状态 71
+
+   28 condition: expression LT expression •
+   35 expression: expression • PLUS expression
+   36           | expression • MINUS expression
+   37           | expression • MULT expression
+   38           | expression • DIV expression
+
+    PLUS   偏移，并进入状态 41
+    MINUS  偏移，并进入状态 42
+    MULT   偏移，并进入状态 43
+    DIV    偏移，并进入状态 44
+
+    $default  使用规则 28 以归约 (condition)
+
+
+状态 72
+
+   30 condition: expression GT expression •
+   35 expression: expression • PLUS expression
+   36           | expression • MINUS expression
+   37           | expression • MULT expression
+   38           | expression • DIV expression
+
+    PLUS   偏移，并进入状态 41
+    MINUS  偏移，并进入状态 42
+    MULT   偏移，并进入状态 43
+    DIV    偏移，并进入状态 44
+
+    $default  使用规则 30 以归约 (condition)
+
+
+状态 73
+
+   29 condition: expression LE expression •
+   35 expression: expression • PLUS expression
+   36           | expression • MINUS expression
+   37           | expression • MULT expression
+   38           | expression • DIV expression
+
+    PLUS   偏移，并进入状态 41
+    MINUS  偏移，并进入状态 42
+    MULT   偏移，并进入状态 43
+    DIV    偏移，并进入状态 44
+
+    $default  使用规则 29 以归约 (condition)
+
+
+状态 74
+
+   31 condition: expression GE expression •
+   35 expression: expression • PLUS expression
+   36           | expression • MINUS expression
+   37           | expression • MULT expression
+   38           | expression • DIV expression
+
+    PLUS   偏移，并进入状态 41
+    MINUS  偏移，并进入状态 42
+    MULT   偏移，并进入状态 43
+    DIV    偏移，并进入状态 44
+
+    $default  使用规则 31 以归约 (condition)
+
+
+状态 75
+
+   24 loop_statement: FOR ID COLON ID LBRACE • statement_list RBRACE
+
+    ID     偏移，并进入状态 1
+    VAR    偏移，并进入状态 2
+    IF     偏移，并进入状态 3
+    FOR    偏移，并进入状态 4
+    WHILE  偏移，并进入状态 5
+    PRINT  偏移，并进入状态 6
+
+    $default  使用规则 3 以归约 (statement_list)
+
+    statement_list        转到状态 79
+    statement             转到状态 9
+    variable_declaration  转到状态 10
+    assignment            转到状态 11
+    if_statement          转到状态 12
+    loop_statement        转到状态 13
+    print_statement       转到状态 14
+
+
+状态 76
+
+   25 loop_statement: WHILE LPAREN condition RPAREN LBRACE • statement_list RBRACE
+
+    ID     偏移，并进入状态 1
+    VAR    偏移，并进入状态 2
+    IF     偏移，并进入状态 3
+    FOR    偏移，并进入状态 4
+    WHILE  偏移，并进入状态 5
+    PRINT  偏移，并进入状态 6
+
+    $default  使用规则 3 以归约 (statement_list)
+
+    statement_list        转到状态 80
+    statement             转到状态 9
+    variable_declaration  转到状态 10
+    assignment            转到状态 11
+    if_statement          转到状态 12
+    loop_statement        转到状态 13
+    print_statement       转到状态 14
+
+
+状态 77
+
+   19 array_dimensions: LBRACKET NUMBER RBRACKET •
+   20                 | LBRACKET NUMBER RBRACKET • array_dimensions
+
+    LBRACKET  偏移，并进入状态 46
+
+    $default  使用规则 19 以归约 (array_dimensions)
+
+    array_dimensions  转到状态 81
+
+
+状态 78
+
+   22 if_statement: IF LPAREN condition RPAREN LBRACE statement_list • RBRACE
+   23             | IF LPAREN condition RPAREN LBRACE statement_list • RBRACE ELSE LBRACE statement_list RBRACE
+
+    RBRACE  偏移，并进入状态 82
+
+
+状态 79
+
+   24 loop_statement: FOR ID COLON ID LBRACE statement_list • RBRACE
+
+    RBRACE  偏移，并进入状态 83
+
+
+状态 80
+
+   25 loop_statement: WHILE LPAREN condition RPAREN LBRACE statement_list • RBRACE
+
+    RBRACE  偏移，并进入状态 84
+
+
+状态 81
+
+   20 array_dimensions: LBRACKET NUMBER RBRACKET array_dimensions •
+
+    $default  使用规则 20 以归约 (array_dimensions)
+
+
+状态 82
+
+   22 if_statement: IF LPAREN condition RPAREN LBRACE statement_list RBRACE •
+   23             | IF LPAREN condition RPAREN LBRACE statement_list RBRACE • ELSE LBRACE statement_list RBRACE
+
+    ELSE  偏移，并进入状态 85
+
+    $default  使用规则 22 以归约 (if_statement)
+
+
+状态 83
+
+   24 loop_statement: FOR ID COLON ID LBRACE statement_list RBRACE •
+
+    $default  使用规则 24 以归约 (loop_statement)
+
+
+状态 84
+
+   25 loop_statement: WHILE LPAREN condition RPAREN LBRACE statement_list RBRACE •
+
+    $default  使用规则 25 以归约 (loop_statement)
+
+
+状态 85
+
+   23 if_statement: IF LPAREN condition RPAREN LBRACE statement_list RBRACE ELSE • LBRACE statement_list RBRACE
+
+    LBRACE  偏移，并进入状态 86
+
+
+状态 86
+
+   23 if_statement: IF LPAREN condition RPAREN LBRACE statement_list RBRACE ELSE LBRACE • statement_list RBRACE
+
+    ID     偏移，并进入状态 1
+    VAR    偏移，并进入状态 2
+    IF     偏移，并进入状态 3
+    FOR    偏移，并进入状态 4
+    WHILE  偏移，并进入状态 5
+    PRINT  偏移，并进入状态 6
+
+    $default  使用规则 3 以归约 (statement_list)
+
+    statement_list        转到状态 87
+    statement             转到状态 9
+    variable_declaration  转到状态 10
+    assignment            转到状态 11
+    if_statement          转到状态 12
+    loop_statement        转到状态 13
+    print_statement       转到状态 14
+
+
+状态 87
+
+   23 if_statement: IF LPAREN condition RPAREN LBRACE statement_list RBRACE ELSE LBRACE statement_list • RBRACE
+
+    RBRACE  偏移，并进入状态 88
+
+
+状态 88
+
+   23 if_statement: IF LPAREN condition RPAREN LBRACE statement_list RBRACE ELSE LBRACE statement_list RBRACE •
+
+    $default  使用规则 23 以归约 (if_statement)

@@ -1,0 +1,48 @@
+id_list --> aa
+id_list --> a , id_list
+type --> int
+variable_declaration --> var id_list type
+statement --> variable_declaration
+expression --> 2
+assignment --> a = expression
+statement --> assignment
+expression --> a
+expression --> 3
+condition --> expression == expression
+expression --> 4
+assignment --> a = expression
+statement --> assignment
+statement_list --> ε
+statement_list --> statement statement_list
+statement --> if_statement
+expression --> 2
+expression --> 2
+condition --> expression == expression
+expression --> 5
+assignment --> aa = expression
+statement --> assignment
+statement_list --> ε
+statement_list --> statement statement_list
+statement --> if_statement
+expression --> 1
+expression --> 2
+condition --> expression == expression
+expression --> 9
+assignment --> a = expression
+statement --> assignment
+statement_list --> ε
+statement_list --> statement statement_list
+loop_statement --> while ( condition ) { statement_list }
+statement --> loop_statement
+statement --> print_statement
+expression --> asd
+statement --> print_statement
+statement_list --> ε
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+program --> statement_list
