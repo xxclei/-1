@@ -86,10 +86,12 @@ FILE *treeFile;
 extern FILE *yyin;
 
 int linecount = 1;
-
+int isif=0;
+int iselse=0;
 int isStatement = 0;
 
 int idNum = 0;
+int if_flag=1;
 
 
 struct word {
@@ -111,8 +113,12 @@ void free_list(struct word *head);
 
 struct word *isExist(char *word);
 
+char* string_add(const char* str1, const char* str2);
 
-#line 116 "y.tab.c"
+char* string_subtract(const char* str1, const char* str2);
+
+
+#line 122 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -233,14 +239,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 46 "demo.y"
+#line 52 "demo.y"
 
     int intVal;
     double doubleVal;
     char* strVal;
     char* id;
 
-#line 244 "y.tab.c"
+#line 250 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -308,7 +314,8 @@ enum yysymbol_kind_t
   YYSYMBOL_loop_statement = 45,            /* loop_statement  */
   YYSYMBOL_condition = 46,                 /* condition  */
   YYSYMBOL_expression = 47,                /* expression  */
-  YYSYMBOL_print_statement = 48            /* print_statement  */
+  YYSYMBOL_expression2 = 48,               /* expression2  */
+  YYSYMBOL_print_statement = 49            /* print_statement  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -636,16 +643,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  22
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   91
+#define YYLAST   110
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  35
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  14
+#define YYNNTS  15
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  41
+#define YYNRULES  46
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  89
+#define YYNSTATES  101
 
 /* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   289
@@ -695,13 +702,13 @@ static const yytype_int8 yytranslate[] =
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_uint8 yyrline[] =
+static const yytype_int16 yyrline[] =
 {
-       0,    74,    74,    77,    78,    81,    82,    83,    84,    85,
-      88,    89,    92,    93,    96,   100,   104,   108,   112,   113,
-     116,   117,   120,   136,   144,   155,   156,   159,   160,   161,
-     162,   163,   164,   167,   168,   181,   182,   183,   184,   185,
-     188,   192
+       0,    84,    84,    87,    88,    91,    92,    93,    94,    95,
+      98,    99,   102,   103,   106,   110,   114,   118,   122,   123,
+     126,   127,   130,   169,   181,   196,   197,   200,   201,   202,
+     203,   204,   205,   206,   209,   210,   228,   229,   230,   231,
+     232,   236,   240,   244,   248,   256,   268
 };
 #endif
 
@@ -724,7 +731,7 @@ static const char *const yytname[] =
   "LBRACE", "RBRACE", "PRINT", "$accept", "program", "statement_list",
   "statement", "variable_declaration", "id_list", "type",
   "array_dimensions", "assignment", "if_statement", "loop_statement",
-  "condition", "expression", "print_statement", YY_NULLPTR
+  "condition", "expression", "expression2", "print_statement", YY_NULLPTR
 };
 
 static const char *
@@ -734,7 +741,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-30)
+#define YYPACT_NINF (-29)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -748,15 +755,17 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-       0,   -15,     2,   -16,    12,   -14,    -4,    27,   -30,     0,
-     -30,   -30,   -30,   -30,   -30,    17,     5,    11,    17,     7,
-      17,    14,   -30,   -30,   -30,   -30,    17,    45,     2,     9,
-       9,   -30,   -30,    16,    15,    58,    42,    26,    33,    34,
-      38,    17,    17,    17,    17,   -30,    54,   -30,   -30,    17,
-      36,    17,    17,    17,    17,    17,    17,    39,    40,   -30,
-     -30,   -30,    -6,    -6,   -30,   -30,    41,    45,     0,    45,
-      45,    45,    45,    45,    45,     0,     0,     9,    51,    52,
-      53,   -30,    79,   -30,   -30,    56,     0,    57,   -30
+      19,    -5,     7,   -13,    18,     3,     4,    32,   -29,    19,
+     -29,   -29,   -29,   -29,   -29,     5,    13,    70,     0,    20,
+       0,     0,   -29,   -29,   -29,   -29,     5,    86,     7,    17,
+      17,   -29,   -29,    43,   -29,     0,    27,    75,    -4,    63,
+      37,    39,    44,    56,     5,     5,     5,     5,   -29,    65,
+     -29,   -29,     5,    49,    45,     5,     5,     5,     5,     5,
+       5,     1,     1,     1,    53,    54,   -29,   -29,   -29,     2,
+       2,   -29,   -29,    47,    86,   -29,    19,    86,    86,    86,
+      86,    86,    86,     1,   -29,   -29,     8,    19,    19,    17,
+      55,    61,    72,   -29,    98,   -29,   -29,    76,    19,    74,
+     -29
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -766,27 +775,29 @@ static const yytype_int8 yydefact[] =
 {
        4,     0,     0,     0,     0,     0,     0,     0,     2,     4,
        5,     6,     7,     8,     9,     0,    12,     0,     0,     0,
-       0,     0,     1,     3,    34,    33,     0,    22,     0,    14,
-      15,    16,    17,    10,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,    13,     0,    18,    19,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,    40,
-      41,    35,    36,    37,    38,    39,     0,    11,     4,    27,
-      28,    29,    31,    30,    32,     4,     4,    20,     0,     0,
-       0,    21,    23,    25,    26,     0,     4,     0,    24
+       0,     0,     1,     3,    35,    34,     0,    22,     0,    14,
+      15,    16,    17,    10,    44,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,    13,     0,
+      18,    19,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,    45,    46,    36,    37,
+      38,    39,    40,     0,    11,    41,     4,    27,    28,    29,
+      31,    30,    32,     0,    42,    43,    33,     4,     4,    20,
+       0,     0,     0,    21,    23,    25,    26,     0,     4,     0,
+      24
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -30,   -30,    -9,   -30,   -30,    61,   -30,   -29,   -30,   -30,
-     -30,    71,   -13,   -30
+     -29,   -29,    -9,   -29,   -29,    81,   -29,   -28,   -29,   -29,
+     -29,    90,    -8,   -20,   -29
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     7,     8,     9,    10,    17,    33,    47,    11,    12,
-      13,    34,    35,    14
+       0,     7,     8,     9,    10,    17,    33,    50,    11,    12,
+      13,    36,    37,    38,    14
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -794,30 +805,34 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      23,    48,    27,     1,    15,    16,     2,     3,    39,     4,
-       5,    43,    44,    40,    18,    19,    20,    24,    25,    38,
-      24,    25,    29,    30,    31,    32,    21,    22,    62,    63,
-      64,    65,    28,    36,     6,    49,    67,    46,    69,    70,
-      71,    72,    73,    74,    26,    57,    50,    26,    81,    41,
-      42,    43,    44,    41,    42,    43,    44,    58,    66,    78,
-      41,    42,    43,    44,    59,    60,    79,    80,    68,    61,
-      77,    75,    76,    41,    42,    43,    44,    87,    51,    52,
-      53,    54,    55,    56,    82,    83,    84,    85,    86,    45,
-      88,    37
+      23,    42,    51,    24,    25,    34,    34,    27,    24,    25,
+      16,    61,    62,    41,    15,    53,    63,    18,    43,    46,
+      47,    19,     1,    61,    62,     2,     3,    43,     4,     5,
+      35,    83,    22,    20,    21,    26,    69,    70,    71,    72,
+      28,    84,    85,    86,    74,    49,    39,    77,    78,    79,
+      80,    81,    82,     6,    44,    45,    46,    47,    54,    61,
+      62,    93,    52,    53,    61,    62,    64,    90,    65,    73,
+      66,    44,    45,    46,    47,    67,    89,    76,    91,    92,
+      75,    29,    30,    31,    32,    87,    88,    68,    94,    99,
+      44,    45,    46,    47,    95,    55,    56,    57,    58,    59,
+      60,    44,    45,    46,    47,    96,    97,   100,    98,    48,
+      40
 };
 
 static const yytype_int8 yycheck[] =
 {
-       9,    30,    15,     3,    19,     3,     6,     7,    21,     9,
-      10,    17,    18,    26,    30,     3,    30,     3,     4,     5,
-       3,     4,    11,    12,    13,    14,    30,     0,    41,    42,
-      43,    44,    27,    26,    34,    19,    49,    28,    51,    52,
-      53,    54,    55,    56,    30,     3,    31,    30,    77,    15,
-      16,    17,    18,    15,    16,    17,    18,    31,     4,    68,
-      15,    16,    17,    18,    31,    31,    75,    76,    32,    31,
-      29,    32,    32,    15,    16,    17,    18,    86,    20,    21,
-      22,    23,    24,    25,    33,    33,    33,     8,    32,    28,
-      33,    20
+       9,    21,    30,     3,     4,     5,     5,    15,     3,     4,
+       3,    15,    16,    21,    19,    35,    20,    30,    26,    17,
+      18,     3,     3,    15,    16,     6,     7,    35,     9,    10,
+      30,    30,     0,    30,    30,    30,    44,    45,    46,    47,
+      27,    61,    62,    63,    52,    28,    26,    55,    56,    57,
+      58,    59,    60,    34,    15,    16,    17,    18,    31,    15,
+      16,    89,    19,    83,    15,    16,     3,    76,    31,     4,
+      31,    15,    16,    17,    18,    31,    29,    32,    87,    88,
+      31,    11,    12,    13,    14,    32,    32,    31,    33,    98,
+      15,    16,    17,    18,    33,    20,    21,    22,    23,    24,
+      25,    15,    16,    17,    18,    33,     8,    33,    32,    28,
+      20
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
@@ -825,14 +840,16 @@ static const yytype_int8 yycheck[] =
 static const yytype_int8 yystos[] =
 {
        0,     3,     6,     7,     9,    10,    34,    36,    37,    38,
-      39,    43,    44,    45,    48,    19,     3,    40,    30,     3,
+      39,    43,    44,    45,    49,    19,     3,    40,    30,     3,
       30,    30,     0,    37,     3,     4,    30,    47,    27,    11,
-      12,    13,    14,    41,    46,    47,    26,    46,     5,    47,
-      47,    15,    16,    17,    18,    40,    28,    42,    42,    19,
-      31,    20,    21,    22,    23,    24,    25,     3,    31,    31,
-      31,    31,    47,    47,    47,    47,     4,    47,    32,    47,
-      47,    47,    47,    47,    47,    32,    32,    29,    37,    37,
-      37,    42,    33,    33,    33,     8,    32,    37,    33
+      12,    13,    14,    41,     5,    30,    46,    47,    48,    26,
+      46,    47,    48,    47,    15,    16,    17,    18,    40,    28,
+      42,    42,    19,    48,    31,    20,    21,    22,    23,    24,
+      25,    15,    16,    20,     3,    31,    31,    31,    31,    47,
+      47,    47,    47,     4,    47,    31,    32,    47,    47,    47,
+      47,    47,    47,    30,    48,    48,    48,    32,    32,    29,
+      37,    37,    37,    42,    33,    33,    33,     8,    32,    37,
+      33
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
@@ -841,8 +858,8 @@ static const yytype_int8 yyr1[] =
        0,    35,    36,    37,    37,    38,    38,    38,    38,    38,
       39,    39,    40,    40,    41,    41,    41,    41,    41,    41,
       42,    42,    43,    44,    44,    45,    45,    46,    46,    46,
-      46,    46,    46,    47,    47,    47,    47,    47,    47,    47,
-      48,    48
+      46,    46,    46,    46,    47,    47,    47,    47,    47,    47,
+      47,    48,    48,    48,    48,    49,    49
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
@@ -851,8 +868,8 @@ static const yytype_int8 yyr2[] =
        0,     2,     1,     2,     0,     1,     1,     1,     1,     1,
        3,     5,     1,     3,     1,     1,     1,     1,     2,     2,
        3,     4,     3,     7,    11,     7,     7,     3,     3,     3,
-       3,     3,     3,     1,     1,     3,     3,     3,     3,     3,
-       4,     4
+       3,     3,     3,     3,     1,     1,     3,     3,     3,     3,
+       3,     3,     3,     3,     1,     4,     4
 };
 
 
@@ -1316,239 +1333,275 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: statement_list  */
-#line 74 "demo.y"
+#line 84 "demo.y"
                        { fprintf(treeFile, "program --> statement_list\n");}
-#line 1322 "y.tab.c"
+#line 1339 "y.tab.c"
     break;
 
   case 3: /* statement_list: statement statement_list  */
-#line 77 "demo.y"
+#line 87 "demo.y"
                                         { fprintf(treeFile, "statement_list --> statement statement_list\n");}
-#line 1328 "y.tab.c"
+#line 1345 "y.tab.c"
     break;
 
   case 4: /* statement_list: %empty  */
-#line 78 "demo.y"
+#line 88 "demo.y"
                          { fprintf(treeFile, "statement_list --> ε\n");}
-#line 1334 "y.tab.c"
+#line 1351 "y.tab.c"
     break;
 
   case 5: /* statement: variable_declaration  */
-#line 81 "demo.y"
+#line 91 "demo.y"
                                { fprintf(treeFile, "statement --> variable_declaration\n");}
-#line 1340 "y.tab.c"
+#line 1357 "y.tab.c"
     break;
 
   case 6: /* statement: assignment  */
-#line 82 "demo.y"
+#line 92 "demo.y"
                      { fprintf(treeFile, "statement --> assignment\n");}
-#line 1346 "y.tab.c"
+#line 1363 "y.tab.c"
     break;
 
   case 7: /* statement: if_statement  */
-#line 83 "demo.y"
+#line 93 "demo.y"
                        { fprintf(treeFile, "statement --> if_statement\n");}
-#line 1352 "y.tab.c"
+#line 1369 "y.tab.c"
     break;
 
   case 8: /* statement: loop_statement  */
-#line 84 "demo.y"
+#line 94 "demo.y"
                          { fprintf(treeFile, "statement --> loop_statement\n");}
-#line 1358 "y.tab.c"
+#line 1375 "y.tab.c"
     break;
 
   case 9: /* statement: print_statement  */
-#line 85 "demo.y"
+#line 95 "demo.y"
                           { fprintf(treeFile, "statement --> print_statement\n"); }
-#line 1364 "y.tab.c"
+#line 1381 "y.tab.c"
     break;
 
   case 10: /* variable_declaration: VAR id_list type  */
-#line 88 "demo.y"
+#line 98 "demo.y"
                                       { fprintf(treeFile, "variable_declaration --> var id_list type\n");}
-#line 1370 "y.tab.c"
+#line 1387 "y.tab.c"
     break;
 
   case 11: /* variable_declaration: VAR id_list type ASSIGN expression  */
-#line 89 "demo.y"
+#line 99 "demo.y"
                                                         { fprintf(treeFile, "variable_declaration --> var id_list type = expression\n");}
-#line 1376 "y.tab.c"
+#line 1393 "y.tab.c"
     break;
 
   case 12: /* id_list: ID  */
-#line 92 "demo.y"
+#line 102 "demo.y"
             { isStatement = 0; fprintf(treeFile, "id_list --> %s\n",(yyvsp[0].id));}
-#line 1382 "y.tab.c"
+#line 1399 "y.tab.c"
     break;
 
   case 13: /* id_list: ID COMMA id_list  */
-#line 93 "demo.y"
+#line 103 "demo.y"
                           { fprintf(treeFile, "id_list --> %s , id_list\n",(yyvsp[-2].id));}
-#line 1388 "y.tab.c"
+#line 1405 "y.tab.c"
     break;
 
   case 14: /* type: INT  */
-#line 96 "demo.y"
+#line 106 "demo.y"
          {
             pushType(idNum,1);
             fprintf(treeFile, "type --> int\n");
          }
-#line 1397 "y.tab.c"
+#line 1414 "y.tab.c"
     break;
 
   case 15: /* type: DOUBLE  */
-#line 100 "demo.y"
+#line 110 "demo.y"
             {
                 pushType(idNum,2); 
                 fprintf(treeFile, "type --> double\n");
             }
-#line 1406 "y.tab.c"
+#line 1423 "y.tab.c"
     break;
 
   case 16: /* type: STRING  */
-#line 104 "demo.y"
+#line 114 "demo.y"
             { 
                 pushType(idNum,3); 
                 fprintf(treeFile, "type --> string\n");
             }
-#line 1415 "y.tab.c"
+#line 1432 "y.tab.c"
     break;
 
   case 17: /* type: BOOL  */
-#line 108 "demo.y"
+#line 118 "demo.y"
             { 
                 pushType(idNum,4); 
                 fprintf(treeFile, "type --> bool\n");
             }
-#line 1424 "y.tab.c"
+#line 1441 "y.tab.c"
     break;
 
   case 18: /* type: INT array_dimensions  */
-#line 112 "demo.y"
+#line 122 "demo.y"
                           { fprintf(treeFile, "type --> int array_dimensions\n");}
-#line 1430 "y.tab.c"
+#line 1447 "y.tab.c"
     break;
 
   case 19: /* type: DOUBLE array_dimensions  */
-#line 113 "demo.y"
+#line 123 "demo.y"
                              { fprintf(treeFile, "type --> double array_dimensions\n");}
-#line 1436 "y.tab.c"
+#line 1453 "y.tab.c"
     break;
 
   case 20: /* array_dimensions: LBRACKET NUMBER RBRACKET  */
-#line 116 "demo.y"
+#line 126 "demo.y"
                                           { fprintf(treeFile, "array_dimensions --> [ %d ]\n",(yyvsp[-1].intVal));}
-#line 1442 "y.tab.c"
+#line 1459 "y.tab.c"
     break;
 
   case 21: /* array_dimensions: LBRACKET NUMBER RBRACKET array_dimensions  */
-#line 117 "demo.y"
+#line 127 "demo.y"
                                                            { fprintf(treeFile, "array_dimensions --> [ %d ] array_dimensions\n",(yyvsp[-2].intVal));}
-#line 1448 "y.tab.c"
+#line 1465 "y.tab.c"
     break;
 
   case 22: /* assignment: ID ASSIGN expression  */
-#line 120 "demo.y"
-                                { 
-                                    char * name = (yyvsp[-2].id);
-                                    struct word *w = isExist(name);
-                                    int type = TYPE_NAME((yyvsp[0].intVal));
-                                    if(w != NULL){
-                                        if(w->word_type == type){
-                                            w->value.int_value = (yyvsp[0].intVal); 
-                                            printf("%s:%d\n",(yyvsp[-2].id),w->value.int_value);
-                                        }else{
-                                            printf("error: %s's type mismatch\n",name);
+#line 130 "demo.y"
+                                {       
+    // printf("isif=%d  isflag=%d",isif,if_flag);
+                                        
+                                        if(!isif)
+                                        {
+                                        char * name = (yyvsp[-2].id);
+                                        struct word *w = isExist(name);
+                                        int type = TYPE_NAME((yyvsp[0].intVal));
+                                        if(w != NULL){
+                                            if(w->word_type == type){
+                                                w->value.int_value = (yyvsp[0].intVal); 
+                                                printf("%s:%d\n",(yyvsp[-2].id),w->value.int_value);
+                                            }else{
+                                                printf("error: %s's type mismatch\n",name);
+                                            }
                                         }
-                                    }
-                                    fprintf(treeFile, "assignment --> %s = expression\n",(yyvsp[-2].id));
+                                        fprintf(treeFile, "assignment --> %s = expression\n",(yyvsp[-2].id));
+                                        }
+
+                                        else
+                                            {if(if_flag!=0){
+                                                // {printf("if语句中的赋值:");
+                                                char * name = (yyvsp[-2].id);
+                                                struct word *w = isExist(name);
+                                                int type = TYPE_NAME((yyvsp[0].intVal));
+                                                if(w != NULL){
+                                                    if(w->word_type == type){
+                                                        w->value.int_value = (yyvsp[0].intVal); 
+                                                        printf("%s:%d\n",(yyvsp[-2].id),w->value.int_value);
+                                                    }else{
+                                                        printf("error: %s's type mismatch\n",name);
+                                                    }
+                                                }
+                                                fprintf(treeFile, "assignment --> %s = expression\n",(yyvsp[-2].id));
+                                                }
+                                        }
                                 }
-#line 1467 "y.tab.c"
+#line 1507 "y.tab.c"
     break;
 
   case 23: /* if_statement: IF LPAREN condition RPAREN LBRACE statement_list RBRACE  */
-#line 136 "demo.y"
-                                                                     { fprintf(treeFile, "if_statement --> if ( condition ) { statement_list }\n");
+#line 169 "demo.y"
+                                                                     { 
+    isif=0;
+    fprintf(treeFile, "if_statement --> if ( condition ) { statement_list }\n");
             if ((yyvsp[-4].intVal)) {  // 如果条件为真
-                printf("执行if\n");
+            if_flag=1;
+                // printf("执行if\n");
                 (yyval.strVal)=(yyvsp[-1].strVal);
             }
-            else{printf("if_statement不执行\n");
+            else{
+                // printf("if_statement不执行\n");
             (yyval.strVal)="NULL";}
 }
-#line 1480 "y.tab.c"
-    break;
-
-  case 24: /* if_statement: IF LPAREN condition RPAREN LBRACE statement_list RBRACE ELSE LBRACE statement_list RBRACE  */
-#line 144 "demo.y"
-                                                                                                       { fprintf(treeFile, "if_statement --> if ( condition ) { statement_list } else { statement_list }\n");
-                        if ((yyvsp[-8].intVal)) {  // 如果条件为真
-                printf("执行if\n");
-                (yyval.strVal)=(yyvsp[-5].strVal);
-            } else {
-                printf("执行else\n");
-                (yyval.strVal)=(yyvsp[-1].strVal);
-            }
-            }
-#line 1494 "y.tab.c"
-    break;
-
-  case 25: /* loop_statement: FOR ID COLON ID LBRACE statement_list RBRACE  */
-#line 155 "demo.y"
-                                                                                       { fprintf(treeFile, "loop_statement --> for %s : %s { statement_list }\n", (yyvsp[-5].id), (yyvsp[-3].id));}
-#line 1500 "y.tab.c"
-    break;
-
-  case 26: /* loop_statement: WHILE LPAREN condition RPAREN LBRACE statement_list RBRACE  */
-#line 156 "demo.y"
-                                                                          { fprintf(treeFile, "loop_statement --> while ( condition ) { statement_list }\n");while((yyvsp[-4].intVal)){printf("执行while循环");(yyvsp[-1].strVal);}}
-#line 1506 "y.tab.c"
-    break;
-
-  case 27: /* condition: expression EQ expression  */
-#line 159 "demo.y"
-                                    { fprintf(treeFile, "condition --> expression == expression\n");(yyval.intVal) = ((yyvsp[-2].intVal) == (yyvsp[0].intVal));}
-#line 1512 "y.tab.c"
-    break;
-
-  case 28: /* condition: expression NE expression  */
-#line 160 "demo.y"
-                                    { fprintf(treeFile, "condition --> expression != expression\n");(yyval.intVal) = ((yyvsp[-2].intVal) != (yyvsp[0].intVal)); }
-#line 1518 "y.tab.c"
-    break;
-
-  case 29: /* condition: expression LT expression  */
-#line 161 "demo.y"
-                                    { fprintf(treeFile, "condition --> expression < expression\n");(yyval.intVal) = ((yyvsp[-2].intVal) < (yyvsp[0].intVal)); }
 #line 1524 "y.tab.c"
     break;
 
+  case 24: /* if_statement: IF LPAREN condition RPAREN LBRACE statement_list RBRACE ELSE LBRACE statement_list RBRACE  */
+#line 182 "demo.y"
+            {   isif=0;
+                fprintf(treeFile, "if_statement --> if ( condition ) { statement_list } else { statement_list }\n");
+                        if ((yyvsp[-8].intVal)) {  // 如果条件为真
+                        if_flag=1;
+                // printf("执行if\n");
+                (yyval.strVal)=(yyvsp[-5].strVal);
+            } else {
+                if_flag=0;
+                // printf("执行else\n");
+                (yyval.strVal)=(yyvsp[-1].strVal);
+            }
+            }
+#line 1541 "y.tab.c"
+    break;
+
+  case 25: /* loop_statement: FOR ID COLON ID LBRACE statement_list RBRACE  */
+#line 196 "demo.y"
+                                                                                       { fprintf(treeFile, "loop_statement --> for %s : %s { statement_list }\n", (yyvsp[-5].id), (yyvsp[-3].id));}
+#line 1547 "y.tab.c"
+    break;
+
+  case 26: /* loop_statement: WHILE LPAREN condition RPAREN LBRACE statement_list RBRACE  */
+#line 197 "demo.y"
+                                                                          { fprintf(treeFile, "loop_statement --> while ( condition ) { statement_list }\n");while((yyvsp[-4].intVal)){printf("执行while循环");(yyvsp[-1].strVal);}}
+#line 1553 "y.tab.c"
+    break;
+
+  case 27: /* condition: expression EQ expression  */
+#line 200 "demo.y"
+                                    { fprintf(treeFile, "condition --> expression == expression\n");if_flag=((yyvsp[-2].intVal) == (yyvsp[0].intVal));(yyval.intVal) = ((yyvsp[-2].intVal) == (yyvsp[0].intVal));}
+#line 1559 "y.tab.c"
+    break;
+
+  case 28: /* condition: expression NE expression  */
+#line 201 "demo.y"
+                                    { fprintf(treeFile, "condition --> expression != expression\n");if_flag=((yyvsp[-2].intVal) != (yyvsp[0].intVal));(yyval.intVal) = ((yyvsp[-2].intVal) != (yyvsp[0].intVal)); }
+#line 1565 "y.tab.c"
+    break;
+
+  case 29: /* condition: expression LT expression  */
+#line 202 "demo.y"
+                                    { fprintf(treeFile, "condition --> expression < expression\n");if_flag=((yyvsp[-2].intVal) < (yyvsp[0].intVal));(yyval.intVal) = ((yyvsp[-2].intVal) < (yyvsp[0].intVal)); }
+#line 1571 "y.tab.c"
+    break;
+
   case 30: /* condition: expression LE expression  */
-#line 162 "demo.y"
-                                    { fprintf(treeFile, "condition --> expression <= expression\n");(yyval.intVal) = ((yyvsp[-2].intVal) <= (yyvsp[0].intVal));}
-#line 1530 "y.tab.c"
+#line 203 "demo.y"
+                                    { fprintf(treeFile, "condition --> expression <= expression\n");if_flag=((yyvsp[-2].intVal) <= (yyvsp[0].intVal));(yyval.intVal) = ((yyvsp[-2].intVal) <= (yyvsp[0].intVal));}
+#line 1577 "y.tab.c"
     break;
 
   case 31: /* condition: expression GT expression  */
-#line 163 "demo.y"
-                                    { fprintf(treeFile, "condition --> expression > expression\n"); (yyval.intVal) = ((yyvsp[-2].intVal) > (yyvsp[0].intVal));}
-#line 1536 "y.tab.c"
+#line 204 "demo.y"
+                                    { fprintf(treeFile, "condition --> expression > expression\n"); if_flag=((yyvsp[-2].intVal) > (yyvsp[0].intVal));(yyval.intVal) = ((yyvsp[-2].intVal) > (yyvsp[0].intVal));}
+#line 1583 "y.tab.c"
     break;
 
   case 32: /* condition: expression GE expression  */
-#line 164 "demo.y"
-                                    { fprintf(treeFile, "condition --> expression >= expression\n");(yyval.intVal) = ((yyvsp[-2].intVal) >= (yyvsp[0].intVal)); }
-#line 1542 "y.tab.c"
+#line 205 "demo.y"
+                                    { fprintf(treeFile, "condition --> expression >= expression\n");if_flag=((yyvsp[-2].intVal) >= (yyvsp[0].intVal));(yyval.intVal) = ((yyvsp[-2].intVal) >= (yyvsp[0].intVal)); }
+#line 1589 "y.tab.c"
     break;
 
-  case 33: /* expression: NUMBER  */
-#line 167 "demo.y"
+  case 33: /* condition: expression2 EQ expression2  */
+#line 206 "demo.y"
+                                      { fprintf(treeFile, "condition --> expression >= expression\n");if_flag=(strcmp((yyvsp[-2].strVal),(yyvsp[0].strVal)));(yyval.intVal) = (strcmp((yyvsp[-2].strVal),(yyvsp[0].strVal))); }
+#line 1595 "y.tab.c"
+    break;
+
+  case 34: /* expression: NUMBER  */
+#line 209 "demo.y"
                    { fprintf(treeFile, "expression --> %d\n", (yyvsp[0].intVal)); (yyval.intVal) = (yyvsp[0].intVal); }
-#line 1548 "y.tab.c"
+#line 1601 "y.tab.c"
     break;
 
-  case 34: /* expression: ID  */
-#line 168 "demo.y"
+  case 35: /* expression: ID  */
+#line 210 "demo.y"
                { 
                 fprintf(treeFile, "expression --> %s\n", (yyvsp[0].id)); 
                 struct word *w = isExist((yyvsp[0].id));
@@ -1556,63 +1609,118 @@ yyreduce:
                     if(w->word_type == 1){
                         (yyval.intVal) = w->value.int_value; 
                     }else{
+                    
                         printf("error: %s's type mismatch\n",(yyvsp[0].id));
                     }
                 }else{
                     printf("%s is not defined\n",(yyvsp[0].id));
                 }
             }
-#line 1566 "y.tab.c"
+#line 1620 "y.tab.c"
     break;
 
-  case 35: /* expression: LPAREN expression RPAREN  */
-#line 181 "demo.y"
+  case 36: /* expression: LPAREN expression RPAREN  */
+#line 228 "demo.y"
                                      { fprintf(treeFile, "expression --> ( expression )\n"); (yyval.intVal) = (yyvsp[-1].intVal); }
-#line 1572 "y.tab.c"
+#line 1626 "y.tab.c"
     break;
 
-  case 36: /* expression: expression PLUS expression  */
-#line 182 "demo.y"
+  case 37: /* expression: expression PLUS expression  */
+#line 229 "demo.y"
                                        { fprintf(treeFile, "expression --> expression + expression\n"); (yyval.intVal) = (yyvsp[-2].intVal) + (yyvsp[0].intVal);}
-#line 1578 "y.tab.c"
+#line 1632 "y.tab.c"
     break;
 
-  case 37: /* expression: expression MINUS expression  */
-#line 183 "demo.y"
+  case 38: /* expression: expression MINUS expression  */
+#line 230 "demo.y"
                                         { fprintf(treeFile, "expression --> expression - expression\n"); (yyval.intVal) = (yyvsp[-2].intVal) - (yyvsp[0].intVal); }
-#line 1584 "y.tab.c"
+#line 1638 "y.tab.c"
     break;
 
-  case 38: /* expression: expression MULT expression  */
-#line 184 "demo.y"
+  case 39: /* expression: expression MULT expression  */
+#line 231 "demo.y"
                                        { fprintf(treeFile, "expression --> expression * expression\n"); (yyval.intVal) = (yyvsp[-2].intVal) * (yyvsp[0].intVal); }
-#line 1590 "y.tab.c"
+#line 1644 "y.tab.c"
     break;
 
-  case 39: /* expression: expression DIV expression  */
-#line 185 "demo.y"
+  case 40: /* expression: expression DIV expression  */
+#line 232 "demo.y"
                                       { fprintf(treeFile, "expression --> expression / expression\n"); (yyval.intVal) = (yyvsp[-2].intVal) / (yyvsp[0].intVal); }
-#line 1596 "y.tab.c"
+#line 1650 "y.tab.c"
     break;
 
-  case 40: /* print_statement: PRINT LPAREN STR RPAREN  */
-#line 189 "demo.y"
-        {
+  case 41: /* expression2: LPAREN expression2 RPAREN  */
+#line 236 "demo.y"
+                              {
+        fprintf(treeFile, "expression --> ( expression )\n");
+        (yyval.strVal) = (yyvsp[-1].strVal);
+    }
+#line 1659 "y.tab.c"
+    break;
+
+  case 42: /* expression2: expression2 PLUS expression2  */
+#line 240 "demo.y"
+                                   {
+        fprintf(treeFile, "expression --> expression + expression\n");
+        (yyval.strVal) = string_add((yyvsp[-2].strVal), (yyvsp[0].strVal));  // 拼接字符串
+    }
+#line 1668 "y.tab.c"
+    break;
+
+  case 43: /* expression2: expression2 MINUS expression2  */
+#line 244 "demo.y"
+                                    {
+        fprintf(treeFile, "expression --> expression - expression\n");
+        (yyval.strVal) = string_subtract((yyvsp[-2].strVal), (yyvsp[0].strVal));  // 减去字符串
+    }
+#line 1677 "y.tab.c"
+    break;
+
+  case 44: /* expression2: STR  */
+#line 248 "demo.y"
+          {
+        fprintf(treeFile, "expression --> STRING: %s\n", (yyvsp[0].strVal));
+        (yyval.strVal) = (yyvsp[0].strVal);  // 直接返回字符串
+    }
+#line 1686 "y.tab.c"
+    break;
+
+  case 45: /* print_statement: PRINT LPAREN expression RPAREN  */
+#line 257 "demo.y"
+    {
+        
+        if(isif==0)
+        printf("%d\n", (yyvsp[-1].intVal));  // 打印字符串内容;
+            
+         else
+            {   if(if_flag!=0)   
+                { printf("%d\n", (yyvsp[-1].intVal));  // 打印表达式的值
+                }
+            }
+    }
+#line 1702 "y.tab.c"
+    break;
+
+  case 46: /* print_statement: PRINT LPAREN expression2 RPAREN  */
+#line 269 "demo.y"
+    {
+        
+       if(isif==0)
+        printf("%s\n", (yyvsp[-1].strVal));  // 打印字符串内容;
+
+        else
+        {   
+            if(if_flag!=0&&isif==1){
+            // printf("if语句中的输出:");
             printf("%s\n", (yyvsp[-1].strVal));  // 打印字符串内容
+            }
         }
-#line 1604 "y.tab.c"
-    break;
-
-  case 41: /* print_statement: PRINT LPAREN expression RPAREN  */
-#line 193 "demo.y"
-        {
-            printf("%d\n", (yyvsp[-1].intVal));  // 打印表达式的值
-        }
-#line 1612 "y.tab.c"
+    }
+#line 1720 "y.tab.c"
     break;
 
 
-#line 1616 "y.tab.c"
+#line 1724 "y.tab.c"
 
       default: break;
     }
@@ -1805,7 +1913,51 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 198 "demo.y"
+#line 285 "demo.y"
+
+
+char* string_add(const char* str1, const char* str2) {
+    size_t len1 = strlen(str1);
+    size_t len2 = strlen(str2);
+    char* result = (char*)malloc(len1 + len2 + 1);  // 分配内存
+    strcpy(result, str1);  // 复制第一个字符串
+    strcat(result, str2);  // 拼接第二个字符串
+    return result;
+}
+
+// 字符串减法函数
+char* string_subtract(const char* str1, const char* str2) {
+    // 查找str2在str1中的位置
+    char* pos = strstr(str1, str2);
+    if (!pos) {
+        // 如果没有找到匹配的部分，直接返回原字符串
+        return strdup(str1);  // strdup会复制并返回一个新的字符串
+    }
+
+    // 计算删除str2后，剩余部分的长度
+    size_t len1 = strlen(str1);
+    size_t len2 = strlen(str2);
+    size_t result_len = len1 - len2;
+
+    // 为结果分配内存，包含终止符
+    char* result = (char*)malloc(result_len + 1);
+    if (!result) {
+        // 内存分配失败时处理
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(1);
+    }
+
+    // 将str1中str2之前的部分复制到result
+    size_t prefix_len = pos - str1;
+    strncpy(result, str1, prefix_len);
+
+    // 将str2之后的部分复制到result
+    strcpy(result + prefix_len, pos + len2);
+
+    return result;
+}
+
+
 
 void yyerror(char *msg) {
     printf("msg = %s at line %d\n",msg,linecount);

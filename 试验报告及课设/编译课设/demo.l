@@ -7,7 +7,9 @@ void yyerror(char *msg);
 extern int linecount;
 
 extern int isStatement;
-
+extern int isif;
+extern int iselse;
+extern int if_flag;
 extern int idNum;
 
 int num = 0;
@@ -35,8 +37,8 @@ int lookup_word(char *word);
 [\n]+               { linecount++; }
 [ \t\r]+            /* 忽略空白字符 */
 "var"               { num = 0; isStatement = 1; return VAR; }
-"if"                { return IF; }
-"else"              { return ELSE; }
+"if"                { isif=1;return IF; }
+"else"              { if_flag=!if_flag;return ELSE; }
 "for"               { return FOR; }
 "while"             { return WHILE; }
 "int"               { return INT; }
