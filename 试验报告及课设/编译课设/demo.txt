@@ -1,9 +1,3 @@
-var a int 
-var b int 
-a=2
-b=3
-if(a==b){a=3}
-else{print("2")}
-a=a+1
-if(a==b){print("a==b")}
-else{print("else")}
+var a string
+a = "123"
+

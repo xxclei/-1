@@ -16,10 +16,12 @@ FILE *treeFile;
 extern FILE *yyin;
 
 int linecount = 1;
-
+int isif=0;
+int iselse=0;
 int isStatement = 0;
 
 int idNum = 0;
+int if_flag=1;
 
 
 struct word {
@@ -40,6 +42,10 @@ void pushType(int idNum,int type);
 void free_list(struct word *head);
 
 struct word *isExist(char *word);
+
+char* string_add(const char* str1, const char* str2);
+
+char* string_subtract(const char* str1, const char* str2);
 
 %}
 
@@ -65,11 +71,15 @@ struct word *isExist(char *word);
 
 /* 非终结符 */
 %type <intVal> expression
+%type <strVal> expression2
 %type <id> id_list type array_dimensions
 %type <strVal> statement_list 
 %type <intVal> condition
 %type <strVal> if_statement 
 %type <strVal> print_statement
+
+
+
 %%
 program: statement_list{ fprintf(treeFile, "program --> statement_list\n");}
         ;
@@ -117,36 +127,67 @@ array_dimensions: LBRACKET NUMBER RBRACKET{ fprintf(treeFile, "array_dimensions 
                 | LBRACKET NUMBER RBRACKET array_dimensions{ fprintf(treeFile, "array_dimensions --> [ %d ] array_dimensions\n",$2);}
                 ;
 
-assignment: ID ASSIGN expression{ 
-                                    char * name = $1;
-                                    struct word *w = isExist(name);
-                                    int type = TYPE_NAME($3);
-                                    if(w != NULL){
-                                        if(w->word_type == type){
-                                            w->value.int_value = $3; 
-                                            printf("%s:%d\n",$1,w->value.int_value);
-                                        }else{
-                                            printf("error: %s's type mismatch\n",name);
+assignment: ID ASSIGN expression{       
+    // printf("isif=%d  isflag=%d",isif,if_flag);
+                                        
+                                        if(!isif)
+                                        {
+                                        char * name = $1;
+                                        struct word *w = isExist(name);
+                                        int type = TYPE_NAME($3);
+                                        if(w != NULL){
+                                            if(w->word_type == type){
+                                                w->value.int_value = $3; 
+                                                printf("%s:%d\n",$1,w->value.int_value);
+                                            }else{
+                                                printf("error: %s's type mismatch\n",name);
+                                            }
                                         }
-                                    }
-                                    fprintf(treeFile, "assignment --> %s = expression\n",$1);
+                                        fprintf(treeFile, "assignment --> %s = expression\n",$1);
+                                        }
+
+                                        else
+                                            {if(if_flag!=0){
+                                                // {printf("if语句中的赋值:");
+                                                char * name = $1;
+                                                struct word *w = isExist(name);
+                                                int type = TYPE_NAME($3);
+                                                if(w != NULL){
+                                                    if(w->word_type == type){
+                                                        w->value.int_value = $3; 
+                                                        printf("%s:%d\n",$1,w->value.int_value);
+                                                    }else{
+                                                        printf("error: %s's type mismatch\n",name);
+                                                    }
+                                                }
+                                                fprintf(treeFile, "assignment --> %s = expression\n",$1);
+                                                }
+                                        }
                                 }
           ;
 
-if_statement: IF LPAREN condition RPAREN LBRACE statement_list RBRACE{ fprintf(treeFile, "if_statement --> if ( condition ) { statement_list }\n");
+if_statement: IF LPAREN condition RPAREN LBRACE statement_list RBRACE{ 
+    isif=0;
+    fprintf(treeFile, "if_statement --> if ( condition ) { statement_list }\n");
             if ($3) {  // 如果条件为真
-                printf("执行if\n");
+            if_flag=1;
+                // printf("执行if\n");
                 $$=$6;
             }
-            else{printf("if_statement不执行\n");
+            else{
+                // printf("if_statement不执行\n");
             $$="NULL";}
 }
-            | IF LPAREN condition RPAREN LBRACE statement_list RBRACE ELSE LBRACE statement_list RBRACE{ fprintf(treeFile, "if_statement --> if ( condition ) { statement_list } else { statement_list }\n");
+            | IF LPAREN condition RPAREN LBRACE statement_list RBRACE ELSE LBRACE statement_list RBRACE
+            {   isif=0;
+                fprintf(treeFile, "if_statement --> if ( condition ) { statement_list } else { statement_list }\n");
                         if ($3) {  // 如果条件为真
-                printf("执行if\n");
+                        if_flag=1;
+                // printf("执行if\n");
                 $$=$6;
             } else {
-                printf("执行else\n");
+                if_flag=0;
+                // printf("执行else\n");
                 $$=$10;
             }
             }
@@ -156,13 +197,14 @@ loop_statement: FOR ID COLON ID LBRACE statement_list RBRACE /* 增强型 for �
               | WHILE LPAREN condition RPAREN LBRACE statement_list RBRACE{ fprintf(treeFile, "loop_statement --> while ( condition ) { statement_list }\n");while($3){printf("执行while循环");$6;}}
               ;
 
-condition: expression EQ expression { fprintf(treeFile, "condition --> expression == expression\n");$$ = ($1 == $3);}
-         | expression NE expression { fprintf(treeFile, "condition --> expression != expression\n");$$ = ($1 != $3); }
-         | expression LT expression { fprintf(treeFile, "condition --> expression < expression\n");$$ = ($1 < $3); }
-         | expression LE expression { fprintf(treeFile, "condition --> expression <= expression\n");$$ = ($1 <= $3);}
-         | expression GT expression { fprintf(treeFile, "condition --> expression > expression\n"); $$ = ($1 > $3);}
-         | expression GE expression { fprintf(treeFile, "condition --> expression >= expression\n");$$ = ($1 >= $3); }
-         ;
+condition: expression EQ expression { fprintf(treeFile, "condition --> expression == expression\n");if_flag=($1 == $3);$$ = ($1 == $3);}
+         | expression NE expression { fprintf(treeFile, "condition --> expression != expression\n");if_flag=($1 != $3);$$ = ($1 != $3); }
+         | expression LT expression { fprintf(treeFile, "condition --> expression < expression\n");if_flag=($1 < $3);$$ = ($1 < $3); }
+         | expression LE expression { fprintf(treeFile, "condition --> expression <= expression\n");if_flag=($1 <= $3);$$ = ($1 <= $3);}
+         | expression GT expression { fprintf(treeFile, "condition --> expression > expression\n"); if_flag=($1 > $3);$$ = ($1 > $3);}
+         | expression GE expression { fprintf(treeFile, "condition --> expression >= expression\n");if_flag=($1 >= $3);$$ = ($1 >= $3); }
+         | expression2 EQ expression2 { fprintf(treeFile, "condition --> expression >= expression\n");if_flag=(strcmp($1,$3));$$ = (strcmp($1,$3)); }
+        ;
 
 expression: NUMBER { fprintf(treeFile, "expression --> %d\n", $1); $$ = $1; }
           | ID { 
@@ -172,12 +214,17 @@ expression: NUMBER { fprintf(treeFile, "expression --> %d\n", $1); $$ = $1; }
                     if(w->word_type == 1){
                         $$ = w->value.int_value; 
                     }else{
+                    
                         printf("error: %s's type mismatch\n",$1);
                     }
                 }else{
                     printf("%s is not defined\n",$1);
                 }
             }
+
+
+
+
           | LPAREN expression RPAREN { fprintf(treeFile, "expression --> ( expression )\n"); $$ = $2; }
           | expression PLUS expression { fprintf(treeFile, "expression --> expression + expression\n"); $$ = $1 + $3;}
           | expression MINUS expression { fprintf(treeFile, "expression --> expression - expression\n"); $$ = $1 - $3; }
@@ -185,17 +232,101 @@ expression: NUMBER { fprintf(treeFile, "expression --> %d\n", $1); $$ = $1; }
           | expression DIV expression { fprintf(treeFile, "expression --> expression / expression\n"); $$ = $1 / $3; }
           ;
 
-print_statement:PRINT LPAREN STR RPAREN
-        {
+expression2:
+    LPAREN expression2 RPAREN {
+        fprintf(treeFile, "expression --> ( expression )\n");
+        $$ = $2;
+    }
+    | expression2 PLUS expression2 {
+        fprintf(treeFile, "expression --> expression + expression\n");
+        $$ = string_add($1, $3);  // 拼接字符串
+    }
+    | expression2 MINUS expression2 {
+        fprintf(treeFile, "expression --> expression - expression\n");
+        $$ = string_subtract($1, $3);  // 减去字符串
+    }
+    | STR {
+        fprintf(treeFile, "expression --> STRING: %s\n", $1);
+        $$ = $1;  // 直接返回字符串
+    }
+;
+
+        
+print_statement:
+     PRINT LPAREN expression RPAREN
+    {
+        
+        if(isif==0)
+        printf("%d\n", $3);  // 打印字符串内容;
+            
+         else
+            {   if(if_flag!=0)   
+                { printf("%d\n", $3);  // 打印表达式的值
+                }
+            }
+    }
+    | PRINT LPAREN expression2 RPAREN
+    {
+        
+       if(isif==0)
+        printf("%s\n", $3);  // 打印字符串内容;
+
+        else
+        {   
+            if(if_flag!=0&&isif==1){
+            // printf("if语句中的输出:");
             printf("%s\n", $3);  // 打印字符串内容
+            }
         }
-    | PRINT LPAREN expression RPAREN
-        {
-            printf("%d\n", $3);  // 打印表达式的值
-        }
+    }
+        
     ;
 
 %%
+
+char* string_add(const char* str1, const char* str2) {
+    size_t len1 = strlen(str1);
+    size_t len2 = strlen(str2);
+    char* result = (char*)malloc(len1 + len2 + 1);  // 分配内存
+    strcpy(result, str1);  // 复制第一个字符串
+    strcat(result, str2);  // 拼接第二个字符串
+    return result;
+}
+
+// 字符串减法函数
+char* string_subtract(const char* str1, const char* str2) {
+    // 查找str2在str1中的位置
+    char* pos = strstr(str1, str2);
+    if (!pos) {
+        // 如果没有找到匹配的部分，直接返回原字符串
+        return strdup(str1);  // strdup会复制并返回一个新的字符串
+    }
+
+    // 计算删除str2后，剩余部分的长度
+    size_t len1 = strlen(str1);
+    size_t len2 = strlen(str2);
+    size_t result_len = len1 - len2;
+
+    // 为结果分配内存，包含终止符
+    char* result = (char*)malloc(result_len + 1);
+    if (!result) {
+        // 内存分配失败时处理
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(1);
+    }
+
+    // 将str1中str2之前的部分复制到result
+    size_t prefix_len = pos - str1;
+    strncpy(result, str1, prefix_len);
+
+    // 将str2之后的部分复制到result
+    strcpy(result + prefix_len, pos + len2);
+
+    return result;
+}
+
+
+
 void yyerror(char *msg) {
     printf("msg = %s at line %d\n",msg,linecount);
     fprintf(stderr, "Error: %s at line %d\n", msg, linecount);

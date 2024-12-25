@@ -131,7 +131,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 46 "demo.y"
+#line 52 "demo.y"
 
     int intVal;
     double doubleVal;

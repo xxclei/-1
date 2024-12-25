@@ -504,7 +504,9 @@ void yyerror(char *msg);
 extern int linecount;
 
 extern int isStatement;
-
+extern int isif;
+extern int iselse;
+extern int if_flag;
 extern int idNum;
 
 int num = 0;
@@ -526,8 +528,8 @@ int add_word(int type, char *word);
 
 int lookup_word(char *word);
 
-#line 530 "lex.yy.c"
-#line 531 "lex.yy.c"
+#line 532 "lex.yy.c"
+#line 533 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -744,9 +746,9 @@ YY_DECL
 		}
 
 	{
-#line 34 "demo.l"
+#line 36 "demo.l"
 
-#line 750 "lex.yy.c"
+#line 752 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -806,172 +808,172 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 35 "demo.l"
+#line 37 "demo.l"
 { linecount++; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 36 "demo.l"
+#line 38 "demo.l"
 /* 忽略空白字符 */
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 37 "demo.l"
+#line 39 "demo.l"
 { num = 0; isStatement = 1; return VAR; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 38 "demo.l"
-{ return IF; }
+#line 40 "demo.l"
+{ isif=1;return IF; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 39 "demo.l"
-{ return ELSE; }
+#line 41 "demo.l"
+{ if_flag=!if_flag;return ELSE; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 40 "demo.l"
+#line 42 "demo.l"
 { return FOR; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 41 "demo.l"
+#line 43 "demo.l"
 { return WHILE; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 42 "demo.l"
+#line 44 "demo.l"
 { return INT; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 43 "demo.l"
+#line 45 "demo.l"
 { return DOUBLE; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 44 "demo.l"
+#line 46 "demo.l"
 { return STRING; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 45 "demo.l"
+#line 47 "demo.l"
 { return BOOL; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 46 "demo.l"
+#line 48 "demo.l"
 { return PRINT; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 47 "demo.l"
+#line 49 "demo.l"
 { return COLON; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 48 "demo.l"
+#line 50 "demo.l"
 { return ASSIGN; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 49 "demo.l"
+#line 51 "demo.l"
 { return EQ; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 50 "demo.l"
+#line 52 "demo.l"
 { return NE; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 51 "demo.l"
+#line 53 "demo.l"
 { return LE; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 52 "demo.l"
+#line 54 "demo.l"
 { return GE; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 53 "demo.l"
+#line 55 "demo.l"
 { return LT; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 54 "demo.l"
+#line 56 "demo.l"
 { return GT; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 55 "demo.l"
+#line 57 "demo.l"
 { return LBRACKET; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 56 "demo.l"
+#line 58 "demo.l"
 { return RBRACKET; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 57 "demo.l"
+#line 59 "demo.l"
 { return LPAREN; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 58 "demo.l"
+#line 60 "demo.l"
 { return RPAREN; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 59 "demo.l"
+#line 61 "demo.l"
 { return LBRACE; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 60 "demo.l"
+#line 62 "demo.l"
 { return RBRACE; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 61 "demo.l"
+#line 63 "demo.l"
 { return COMMA; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 62 "demo.l"
+#line 64 "demo.l"
 { return PLUS; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 63 "demo.l"
+#line 65 "demo.l"
 { return MINUS; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 64 "demo.l"
+#line 66 "demo.l"
 { return MULT; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 65 "demo.l"
+#line 67 "demo.l"
 { return DIV; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 66 "demo.l"
+#line 68 "demo.l"
 { yylval.intVal = atoi(yytext); return NUMBER; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 67 "demo.l"
+#line 69 "demo.l"
 { yylval.doubleVal = atof(yytext); return NUMBER; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 68 "demo.l"
+#line 70 "demo.l"
 {  // 匹配带引号的字符串
     int len = strlen(yytext);
     
@@ -985,7 +987,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 78 "demo.l"
+#line 80 "demo.l"
 {  
                             if(isStatement==1){
                                 num++; 
@@ -1002,20 +1004,20 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 91 "demo.l"
+#line 93 "demo.l"
 { /* 忽略注释 */ }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 92 "demo.l"
+#line 94 "demo.l"
 { printf("%s: lexical error\n", yytext); }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 94 "demo.l"
+#line 96 "demo.l"
 ECHO;
 	YY_BREAK
-#line 1019 "lex.yy.c"
+#line 1021 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2020,7 +2022,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 94 "demo.l"
+#line 96 "demo.l"
 
 
 extern void *malloc();
