@@ -7,3 +7,33 @@ For n_clusters = 7, silhouette_avg: 0.497, Rand index: 0.912, Adjusted Rand inde
 For n_clusters = 8, silhouette_avg: 0.381, Rand index: 0.882, Adjusted Rand index: 0.630
 For n_clusters = 9, silhouette_avg: 0.384, Rand index: 0.873, Adjusted Rand index: 0.594
 For n_clusters = 10, silhouette_avg: 0.391, Rand index: 0.872, Adjusted Rand index: 0.591
+
+
+
+Total dataset size:
+n_samples: 1288
+n_features: 1850
+n_classes: 7
+Extracting the top 150 eigenfaces from 966 faces
+done in 2.683s
+Projecting the input data on the eigenfaces orthonormal basis
+done in 0.015s
+Fitting the classifier to the training set
+done in 4.152s
+Best estimator found by grid search:
+SVC(C=43998.532710915344, class_weight='balanced', gamma=0.0022389592114935557)
+Predicting people's names on the test set
+done in 0.069s
+                   precision    recall  f1-score   support
+
+     Ariel Sharon       0.64      0.69      0.67        13
+     Colin Powell       0.77      0.88      0.82        60
+  Donald Rumsfeld       0.81      0.81      0.81        27
+    George W Bush       0.92      0.94      0.93       146
+Gerhard Schroeder       0.90      0.76      0.83        25
+      Hugo Chavez       0.90      0.60      0.72        15
+       Tony Blair       0.91      0.81      0.85        36
+
+         accuracy                           0.86       322
+        macro avg       0.84      0.78      0.80       322
+     weighted avg       0.87      0.86      0.86       322
