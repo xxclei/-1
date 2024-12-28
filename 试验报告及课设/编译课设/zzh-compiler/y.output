@@ -1,0 +1,1227 @@
+Terminals unused in grammar
+
+   DNUM
+
+
+State 41 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: statement_list
+
+    2 statement_list: statement statement_list
+    3               | /* empty */
+
+    4 statement: variable_declaration
+    5          | assignment
+    6          | if_statement
+    7          | loop_statement
+    8          | print_statement
+
+    9 variable_declaration: VAR id_list type
+   10                     | VAR id_list type ASSIGN expression
+
+   11 id_list: ID
+   12        | ID COMMA id_list
+
+   13 type: INT
+   14     | DOUBLE
+   15     | STRING
+   16     | BOOL
+   17     | INT array_dimensions
+   18     | DOUBLE array_dimensions
+
+   19 array_dimensions: LBRACKET NUMBER RBRACKET
+   20                 | LBRACKET NUMBER RBRACKET array_dimensions
+
+   21 assignment: ID ASSIGN expression2
+   22           | ID ASSIGN expression
+
+   23 if_statement: IF LPAREN condition RPAREN LBRACE statement_list RBRACE
+   24             | IF LPAREN condition RPAREN LBRACE statement_list RBRACE ELSE LBRACE statement_list RBRACE
+
+   25 loop_statement: FOR ID COLON ID LBRACE statement_list RBRACE
+   26               | WHILE LPAREN condition RPAREN LBRACE statement_list RBRACE
+
+   27 condition: expression EQ expression
+   28          | expression NE expression
+   29          | expression LT expression
+   30          | expression LE expression
+   31          | expression GT expression
+   32          | expression GE expression
+
+   33 expression: NUMBER
+   34           | ID
+   35           | LPAREN expression RPAREN
+   36           | expression PLUS expression
+   37           | expression MINUS expression
+   38           | expression MULT expression
+   39           | expression DIV expression
+
+   40 expression2: STR
+   41            | LPAREN expression2 RPAREN
+   42            | expression2 PLUS expression2
+   43            | expression2 MINUS expression2
+
+   44 print_statement: PRINT LPAREN STR RPAREN
+   45                | PRINT LPAREN expression RPAREN
+   46                | PRINT LPAREN expression2 RPAREN
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+ID (258) 11 12 21 22 25 34
+NUMBER (259) 19 20 33
+DNUM (260)
+STR (261) 40 44
+VAR (262) 9 10
+IF (263) 23 24
+ELSE (264) 24
+FOR (265) 25
+WHILE (266) 26
+INT (267) 13 17
+DOUBLE (268) 14 18
+STRING (269) 15
+BOOL (270) 16
+PLUS (271) 36 42
+MINUS (272) 37 43
+MULT (273) 38
+DIV (274) 39
+ASSIGN (275) 10 21 22
+EQ (276) 27
+NE (277) 28
+LT (278) 29
+GT (279) 31
+LE (280) 30
+GE (281) 32
+COLON (282) 25
+COMMA (283) 12
+LBRACKET (284) 19 20
+RBRACKET (285) 19 20
+LPAREN (286) 23 24 26 35 41 44 45 46
+RPAREN (287) 23 24 26 35 41 44 45 46
+LBRACE (288) 23 24 25 26
+RBRACE (289) 23 24 25 26
+PRINT (290) 44 45 46
+
+
+Nonterminals, with rules where they appear
+
+$accept (36)
+    on left: 0
+program (37)
+    on left: 1, on right: 0
+statement_list (38)
+    on left: 2 3, on right: 1 2 23 24 25 26
+statement (39)
+    on left: 4 5 6 7 8, on right: 2
+variable_declaration (40)
+    on left: 9 10, on right: 4
+id_list (41)
+    on left: 11 12, on right: 9 10 12
+type (42)
+    on left: 13 14 15 16 17 18, on right: 9 10
+array_dimensions (43)
+    on left: 19 20, on right: 17 18 20
+assignment (44)
+    on left: 21 22, on right: 5
+if_statement (45)
+    on left: 23 24, on right: 6
+loop_statement (46)
+    on left: 25 26, on right: 7
+condition (47)
+    on left: 27 28 29 30 31 32, on right: 23 24 26
+expression (48)
+    on left: 33 34 35 36 37 38 39, on right: 10 22 27 28 29 30 31 32
+    35 36 37 38 39 45
+expression2 (49)
+    on left: 40 41 42 43, on right: 21 41 42 43 46
+print_statement (50)
+    on left: 44 45 46, on right: 8
+
+
+state 0
+
+    0 $accept: . program $end
+
+    ID     shift, and go to state 1
+    VAR    shift, and go to state 2
+    IF     shift, and go to state 3
+    FOR    shift, and go to state 4
+    WHILE  shift, and go to state 5
+    PRINT  shift, and go to state 6
+
+    $default  reduce using rule 3 (statement_list)
+
+    program               go to state 7
+    statement_list        go to state 8
+    statement             go to state 9
+    variable_declaration  go to state 10
+    assignment            go to state 11
+    if_statement          go to state 12
+    loop_statement        go to state 13
+    print_statement       go to state 14
+
+
+state 1
+
+   21 assignment: ID . ASSIGN expression2
+   22           | ID . ASSIGN expression
+
+    ASSIGN  shift, and go to state 15
+
+
+state 2
+
+    9 variable_declaration: VAR . id_list type
+   10                     | VAR . id_list type ASSIGN expression
+
+    ID  shift, and go to state 16
+
+    id_list  go to state 17
+
+
+state 3
+
+   23 if_statement: IF . LPAREN condition RPAREN LBRACE statement_list RBRACE
+   24             | IF . LPAREN condition RPAREN LBRACE statement_list RBRACE ELSE LBRACE statement_list RBRACE
+
+    LPAREN  shift, and go to state 18
+
+
+state 4
+
+   25 loop_statement: FOR . ID COLON ID LBRACE statement_list RBRACE
+
+    ID  shift, and go to state 19
+
+
+state 5
+
+   26 loop_statement: WHILE . LPAREN condition RPAREN LBRACE statement_list RBRACE
+
+    LPAREN  shift, and go to state 20
+
+
+state 6
+
+   44 print_statement: PRINT . LPAREN STR RPAREN
+   45                | PRINT . LPAREN expression RPAREN
+   46                | PRINT . LPAREN expression2 RPAREN
+
+    LPAREN  shift, and go to state 21
+
+
+state 7
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 22
+
+
+state 8
+
+    1 program: statement_list .
+
+    $default  reduce using rule 1 (program)
+
+
+state 9
+
+    2 statement_list: statement . statement_list
+
+    ID     shift, and go to state 1
+    VAR    shift, and go to state 2
+    IF     shift, and go to state 3
+    FOR    shift, and go to state 4
+    WHILE  shift, and go to state 5
+    PRINT  shift, and go to state 6
+
+    $default  reduce using rule 3 (statement_list)
+
+    statement_list        go to state 23
+    statement             go to state 9
+    variable_declaration  go to state 10
+    assignment            go to state 11
+    if_statement          go to state 12
+    loop_statement        go to state 13
+    print_statement       go to state 14
+
+
+state 10
+
+    4 statement: variable_declaration .
+
+    $default  reduce using rule 4 (statement)
+
+
+state 11
+
+    5 statement: assignment .
+
+    $default  reduce using rule 5 (statement)
+
+
+state 12
+
+    6 statement: if_statement .
+
+    $default  reduce using rule 6 (statement)
+
+
+state 13
+
+    7 statement: loop_statement .
+
+    $default  reduce using rule 7 (statement)
+
+
+state 14
+
+    8 statement: print_statement .
+
+    $default  reduce using rule 8 (statement)
+
+
+state 15
+
+   21 assignment: ID ASSIGN . expression2
+   22           | ID ASSIGN . expression
+
+    ID      shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    STR     shift, and go to state 26
+    LPAREN  shift, and go to state 27
+
+    expression   go to state 28
+    expression2  go to state 29
+
+
+state 16
+
+   11 id_list: ID .
+   12        | ID . COMMA id_list
+
+    COMMA  shift, and go to state 30
+
+    $default  reduce using rule 11 (id_list)
+
+
+state 17
+
+    9 variable_declaration: VAR id_list . type
+   10                     | VAR id_list . type ASSIGN expression
+
+    INT     shift, and go to state 31
+    DOUBLE  shift, and go to state 32
+    STRING  shift, and go to state 33
+    BOOL    shift, and go to state 34
+
+    type  go to state 35
+
+
+state 18
+
+   23 if_statement: IF LPAREN . condition RPAREN LBRACE statement_list RBRACE
+   24             | IF LPAREN . condition RPAREN LBRACE statement_list RBRACE ELSE LBRACE statement_list RBRACE
+
+    ID      shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    LPAREN  shift, and go to state 36
+
+    condition   go to state 37
+    expression  go to state 38
+
+
+state 19
+
+   25 loop_statement: FOR ID . COLON ID LBRACE statement_list RBRACE
+
+    COLON  shift, and go to state 39
+
+
+state 20
+
+   26 loop_statement: WHILE LPAREN . condition RPAREN LBRACE statement_list RBRACE
+
+    ID      shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    LPAREN  shift, and go to state 36
+
+    condition   go to state 40
+    expression  go to state 38
+
+
+state 21
+
+   44 print_statement: PRINT LPAREN . STR RPAREN
+   45                | PRINT LPAREN . expression RPAREN
+   46                | PRINT LPAREN . expression2 RPAREN
+
+    ID      shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    STR     shift, and go to state 41
+    LPAREN  shift, and go to state 27
+
+    expression   go to state 42
+    expression2  go to state 43
+
+
+state 22
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+state 23
+
+    2 statement_list: statement statement_list .
+
+    $default  reduce using rule 2 (statement_list)
+
+
+state 24
+
+   34 expression: ID .
+
+    $default  reduce using rule 34 (expression)
+
+
+state 25
+
+   33 expression: NUMBER .
+
+    $default  reduce using rule 33 (expression)
+
+
+state 26
+
+   40 expression2: STR .
+
+    $default  reduce using rule 40 (expression2)
+
+
+state 27
+
+   35 expression: LPAREN . expression RPAREN
+   41 expression2: LPAREN . expression2 RPAREN
+
+    ID      shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    STR     shift, and go to state 26
+    LPAREN  shift, and go to state 27
+
+    expression   go to state 44
+    expression2  go to state 45
+
+
+state 28
+
+   22 assignment: ID ASSIGN expression .
+   36 expression: expression . PLUS expression
+   37           | expression . MINUS expression
+   38           | expression . MULT expression
+   39           | expression . DIV expression
+
+    PLUS   shift, and go to state 46
+    MINUS  shift, and go to state 47
+    MULT   shift, and go to state 48
+    DIV    shift, and go to state 49
+
+    $default  reduce using rule 22 (assignment)
+
+
+state 29
+
+   21 assignment: ID ASSIGN expression2 .
+   42 expression2: expression2 . PLUS expression2
+   43            | expression2 . MINUS expression2
+
+    PLUS   shift, and go to state 50
+    MINUS  shift, and go to state 51
+
+    $default  reduce using rule 21 (assignment)
+
+
+state 30
+
+   12 id_list: ID COMMA . id_list
+
+    ID  shift, and go to state 16
+
+    id_list  go to state 52
+
+
+state 31
+
+   13 type: INT .
+   17     | INT . array_dimensions
+
+    LBRACKET  shift, and go to state 53
+
+    $default  reduce using rule 13 (type)
+
+    array_dimensions  go to state 54
+
+
+state 32
+
+   14 type: DOUBLE .
+   18     | DOUBLE . array_dimensions
+
+    LBRACKET  shift, and go to state 53
+
+    $default  reduce using rule 14 (type)
+
+    array_dimensions  go to state 55
+
+
+state 33
+
+   15 type: STRING .
+
+    $default  reduce using rule 15 (type)
+
+
+state 34
+
+   16 type: BOOL .
+
+    $default  reduce using rule 16 (type)
+
+
+state 35
+
+    9 variable_declaration: VAR id_list type .
+   10                     | VAR id_list type . ASSIGN expression
+
+    ASSIGN  shift, and go to state 56
+
+    $default  reduce using rule 9 (variable_declaration)
+
+
+state 36
+
+   35 expression: LPAREN . expression RPAREN
+
+    ID      shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    LPAREN  shift, and go to state 36
+
+    expression  go to state 44
+
+
+state 37
+
+   23 if_statement: IF LPAREN condition . RPAREN LBRACE statement_list RBRACE
+   24             | IF LPAREN condition . RPAREN LBRACE statement_list RBRACE ELSE LBRACE statement_list RBRACE
+
+    RPAREN  shift, and go to state 57
+
+
+state 38
+
+   27 condition: expression . EQ expression
+   28          | expression . NE expression
+   29          | expression . LT expression
+   30          | expression . LE expression
+   31          | expression . GT expression
+   32          | expression . GE expression
+   36 expression: expression . PLUS expression
+   37           | expression . MINUS expression
+   38           | expression . MULT expression
+   39           | expression . DIV expression
+
+    PLUS   shift, and go to state 46
+    MINUS  shift, and go to state 47
+    MULT   shift, and go to state 48
+    DIV    shift, and go to state 49
+    EQ     shift, and go to state 58
+    NE     shift, and go to state 59
+    LT     shift, and go to state 60
+    GT     shift, and go to state 61
+    LE     shift, and go to state 62
+    GE     shift, and go to state 63
+
+
+state 39
+
+   25 loop_statement: FOR ID COLON . ID LBRACE statement_list RBRACE
+
+    ID  shift, and go to state 64
+
+
+state 40
+
+   26 loop_statement: WHILE LPAREN condition . RPAREN LBRACE statement_list RBRACE
+
+    RPAREN  shift, and go to state 65
+
+
+state 41
+
+   40 expression2: STR .
+   44 print_statement: PRINT LPAREN STR . RPAREN
+
+    RPAREN  shift, and go to state 66
+
+    RPAREN    [reduce using rule 40 (expression2)]
+    $default  reduce using rule 40 (expression2)
+
+
+state 42
+
+   36 expression: expression . PLUS expression
+   37           | expression . MINUS expression
+   38           | expression . MULT expression
+   39           | expression . DIV expression
+   45 print_statement: PRINT LPAREN expression . RPAREN
+
+    PLUS    shift, and go to state 46
+    MINUS   shift, and go to state 47
+    MULT    shift, and go to state 48
+    DIV     shift, and go to state 49
+    RPAREN  shift, and go to state 67
+
+
+state 43
+
+   42 expression2: expression2 . PLUS expression2
+   43            | expression2 . MINUS expression2
+   46 print_statement: PRINT LPAREN expression2 . RPAREN
+
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    RPAREN  shift, and go to state 68
+
+
+state 44
+
+   35 expression: LPAREN expression . RPAREN
+   36           | expression . PLUS expression
+   37           | expression . MINUS expression
+   38           | expression . MULT expression
+   39           | expression . DIV expression
+
+    PLUS    shift, and go to state 46
+    MINUS   shift, and go to state 47
+    MULT    shift, and go to state 48
+    DIV     shift, and go to state 49
+    RPAREN  shift, and go to state 69
+
+
+state 45
+
+   41 expression2: LPAREN expression2 . RPAREN
+   42            | expression2 . PLUS expression2
+   43            | expression2 . MINUS expression2
+
+    PLUS    shift, and go to state 50
+    MINUS   shift, and go to state 51
+    RPAREN  shift, and go to state 70
+
+
+state 46
+
+   36 expression: expression PLUS . expression
+
+    ID      shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    LPAREN  shift, and go to state 36
+
+    expression  go to state 71
+
+
+state 47
+
+   37 expression: expression MINUS . expression
+
+    ID      shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    LPAREN  shift, and go to state 36
+
+    expression  go to state 72
+
+
+state 48
+
+   38 expression: expression MULT . expression
+
+    ID      shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    LPAREN  shift, and go to state 36
+
+    expression  go to state 73
+
+
+state 49
+
+   39 expression: expression DIV . expression
+
+    ID      shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    LPAREN  shift, and go to state 36
+
+    expression  go to state 74
+
+
+state 50
+
+   42 expression2: expression2 PLUS . expression2
+
+    STR     shift, and go to state 26
+    LPAREN  shift, and go to state 75
+
+    expression2  go to state 76
+
+
+state 51
+
+   43 expression2: expression2 MINUS . expression2
+
+    STR     shift, and go to state 26
+    LPAREN  shift, and go to state 75
+
+    expression2  go to state 77
+
+
+state 52
+
+   12 id_list: ID COMMA id_list .
+
+    $default  reduce using rule 12 (id_list)
+
+
+state 53
+
+   19 array_dimensions: LBRACKET . NUMBER RBRACKET
+   20                 | LBRACKET . NUMBER RBRACKET array_dimensions
+
+    NUMBER  shift, and go to state 78
+
+
+state 54
+
+   17 type: INT array_dimensions .
+
+    $default  reduce using rule 17 (type)
+
+
+state 55
+
+   18 type: DOUBLE array_dimensions .
+
+    $default  reduce using rule 18 (type)
+
+
+state 56
+
+   10 variable_declaration: VAR id_list type ASSIGN . expression
+
+    ID      shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    LPAREN  shift, and go to state 36
+
+    expression  go to state 79
+
+
+state 57
+
+   23 if_statement: IF LPAREN condition RPAREN . LBRACE statement_list RBRACE
+   24             | IF LPAREN condition RPAREN . LBRACE statement_list RBRACE ELSE LBRACE statement_list RBRACE
+
+    LBRACE  shift, and go to state 80
+
+
+state 58
+
+   27 condition: expression EQ . expression
+
+    ID      shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    LPAREN  shift, and go to state 36
+
+    expression  go to state 81
+
+
+state 59
+
+   28 condition: expression NE . expression
+
+    ID      shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    LPAREN  shift, and go to state 36
+
+    expression  go to state 82
+
+
+state 60
+
+   29 condition: expression LT . expression
+
+    ID      shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    LPAREN  shift, and go to state 36
+
+    expression  go to state 83
+
+
+state 61
+
+   31 condition: expression GT . expression
+
+    ID      shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    LPAREN  shift, and go to state 36
+
+    expression  go to state 84
+
+
+state 62
+
+   30 condition: expression LE . expression
+
+    ID      shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    LPAREN  shift, and go to state 36
+
+    expression  go to state 85
+
+
+state 63
+
+   32 condition: expression GE . expression
+
+    ID      shift, and go to state 24
+    NUMBER  shift, and go to state 25
+    LPAREN  shift, and go to state 36
+
+    expression  go to state 86
+
+
+state 64
+
+   25 loop_statement: FOR ID COLON ID . LBRACE statement_list RBRACE
+
+    LBRACE  shift, and go to state 87
+
+
+state 65
+
+   26 loop_statement: WHILE LPAREN condition RPAREN . LBRACE statement_list RBRACE
+
+    LBRACE  shift, and go to state 88
+
+
+state 66
+
+   44 print_statement: PRINT LPAREN STR RPAREN .
+
+    $default  reduce using rule 44 (print_statement)
+
+
+state 67
+
+   45 print_statement: PRINT LPAREN expression RPAREN .
+
+    $default  reduce using rule 45 (print_statement)
+
+
+state 68
+
+   46 print_statement: PRINT LPAREN expression2 RPAREN .
+
+    $default  reduce using rule 46 (print_statement)
+
+
+state 69
+
+   35 expression: LPAREN expression RPAREN .
+
+    $default  reduce using rule 35 (expression)
+
+
+state 70
+
+   41 expression2: LPAREN expression2 RPAREN .
+
+    $default  reduce using rule 41 (expression2)
+
+
+state 71
+
+   36 expression: expression . PLUS expression
+   36           | expression PLUS expression .
+   37           | expression . MINUS expression
+   38           | expression . MULT expression
+   39           | expression . DIV expression
+
+    MULT  shift, and go to state 48
+    DIV   shift, and go to state 49
+
+    $default  reduce using rule 36 (expression)
+
+
+state 72
+
+   36 expression: expression . PLUS expression
+   37           | expression . MINUS expression
+   37           | expression MINUS expression .
+   38           | expression . MULT expression
+   39           | expression . DIV expression
+
+    MULT  shift, and go to state 48
+    DIV   shift, and go to state 49
+
+    $default  reduce using rule 37 (expression)
+
+
+state 73
+
+   36 expression: expression . PLUS expression
+   37           | expression . MINUS expression
+   38           | expression . MULT expression
+   38           | expression MULT expression .
+   39           | expression . DIV expression
+
+    $default  reduce using rule 38 (expression)
+
+
+state 74
+
+   36 expression: expression . PLUS expression
+   37           | expression . MINUS expression
+   38           | expression . MULT expression
+   39           | expression . DIV expression
+   39           | expression DIV expression .
+
+    $default  reduce using rule 39 (expression)
+
+
+state 75
+
+   41 expression2: LPAREN . expression2 RPAREN
+
+    STR     shift, and go to state 26
+    LPAREN  shift, and go to state 75
+
+    expression2  go to state 45
+
+
+state 76
+
+   42 expression2: expression2 . PLUS expression2
+   42            | expression2 PLUS expression2 .
+   43            | expression2 . MINUS expression2
+
+    $default  reduce using rule 42 (expression2)
+
+
+state 77
+
+   42 expression2: expression2 . PLUS expression2
+   43            | expression2 . MINUS expression2
+   43            | expression2 MINUS expression2 .
+
+    $default  reduce using rule 43 (expression2)
+
+
+state 78
+
+   19 array_dimensions: LBRACKET NUMBER . RBRACKET
+   20                 | LBRACKET NUMBER . RBRACKET array_dimensions
+
+    RBRACKET  shift, and go to state 89
+
+
+state 79
+
+   10 variable_declaration: VAR id_list type ASSIGN expression .
+   36 expression: expression . PLUS expression
+   37           | expression . MINUS expression
+   38           | expression . MULT expression
+   39           | expression . DIV expression
+
+    PLUS   shift, and go to state 46
+    MINUS  shift, and go to state 47
+    MULT   shift, and go to state 48
+    DIV    shift, and go to state 49
+
+    $default  reduce using rule 10 (variable_declaration)
+
+
+state 80
+
+   23 if_statement: IF LPAREN condition RPAREN LBRACE . statement_list RBRACE
+   24             | IF LPAREN condition RPAREN LBRACE . statement_list RBRACE ELSE LBRACE statement_list RBRACE
+
+    ID     shift, and go to state 1
+    VAR    shift, and go to state 2
+    IF     shift, and go to state 3
+    FOR    shift, and go to state 4
+    WHILE  shift, and go to state 5
+    PRINT  shift, and go to state 6
+
+    $default  reduce using rule 3 (statement_list)
+
+    statement_list        go to state 90
+    statement             go to state 9
+    variable_declaration  go to state 10
+    assignment            go to state 11
+    if_statement          go to state 12
+    loop_statement        go to state 13
+    print_statement       go to state 14
+
+
+state 81
+
+   27 condition: expression EQ expression .
+   36 expression: expression . PLUS expression
+   37           | expression . MINUS expression
+   38           | expression . MULT expression
+   39           | expression . DIV expression
+
+    PLUS   shift, and go to state 46
+    MINUS  shift, and go to state 47
+    MULT   shift, and go to state 48
+    DIV    shift, and go to state 49
+
+    $default  reduce using rule 27 (condition)
+
+
+state 82
+
+   28 condition: expression NE expression .
+   36 expression: expression . PLUS expression
+   37           | expression . MINUS expression
+   38           | expression . MULT expression
+   39           | expression . DIV expression
+
+    PLUS   shift, and go to state 46
+    MINUS  shift, and go to state 47
+    MULT   shift, and go to state 48
+    DIV    shift, and go to state 49
+
+    $default  reduce using rule 28 (condition)
+
+
+state 83
+
+   29 condition: expression LT expression .
+   36 expression: expression . PLUS expression
+   37           | expression . MINUS expression
+   38           | expression . MULT expression
+   39           | expression . DIV expression
+
+    PLUS   shift, and go to state 46
+    MINUS  shift, and go to state 47
+    MULT   shift, and go to state 48
+    DIV    shift, and go to state 49
+
+    $default  reduce using rule 29 (condition)
+
+
+state 84
+
+   31 condition: expression GT expression .
+   36 expression: expression . PLUS expression
+   37           | expression . MINUS expression
+   38           | expression . MULT expression
+   39           | expression . DIV expression
+
+    PLUS   shift, and go to state 46
+    MINUS  shift, and go to state 47
+    MULT   shift, and go to state 48
+    DIV    shift, and go to state 49
+
+    $default  reduce using rule 31 (condition)
+
+
+state 85
+
+   30 condition: expression LE expression .
+   36 expression: expression . PLUS expression
+   37           | expression . MINUS expression
+   38           | expression . MULT expression
+   39           | expression . DIV expression
+
+    PLUS   shift, and go to state 46
+    MINUS  shift, and go to state 47
+    MULT   shift, and go to state 48
+    DIV    shift, and go to state 49
+
+    $default  reduce using rule 30 (condition)
+
+
+state 86
+
+   32 condition: expression GE expression .
+   36 expression: expression . PLUS expression
+   37           | expression . MINUS expression
+   38           | expression . MULT expression
+   39           | expression . DIV expression
+
+    PLUS   shift, and go to state 46
+    MINUS  shift, and go to state 47
+    MULT   shift, and go to state 48
+    DIV    shift, and go to state 49
+
+    $default  reduce using rule 32 (condition)
+
+
+state 87
+
+   25 loop_statement: FOR ID COLON ID LBRACE . statement_list RBRACE
+
+    ID     shift, and go to state 1
+    VAR    shift, and go to state 2
+    IF     shift, and go to state 3
+    FOR    shift, and go to state 4
+    WHILE  shift, and go to state 5
+    PRINT  shift, and go to state 6
+
+    $default  reduce using rule 3 (statement_list)
+
+    statement_list        go to state 91
+    statement             go to state 9
+    variable_declaration  go to state 10
+    assignment            go to state 11
+    if_statement          go to state 12
+    loop_statement        go to state 13
+    print_statement       go to state 14
+
+
+state 88
+
+   26 loop_statement: WHILE LPAREN condition RPAREN LBRACE . statement_list RBRACE
+
+    ID     shift, and go to state 1
+    VAR    shift, and go to state 2
+    IF     shift, and go to state 3
+    FOR    shift, and go to state 4
+    WHILE  shift, and go to state 5
+    PRINT  shift, and go to state 6
+
+    $default  reduce using rule 3 (statement_list)
+
+    statement_list        go to state 92
+    statement             go to state 9
+    variable_declaration  go to state 10
+    assignment            go to state 11
+    if_statement          go to state 12
+    loop_statement        go to state 13
+    print_statement       go to state 14
+
+
+state 89
+
+   19 array_dimensions: LBRACKET NUMBER RBRACKET .
+   20                 | LBRACKET NUMBER RBRACKET . array_dimensions
+
+    LBRACKET  shift, and go to state 53
+
+    $default  reduce using rule 19 (array_dimensions)
+
+    array_dimensions  go to state 93
+
+
+state 90
+
+   23 if_statement: IF LPAREN condition RPAREN LBRACE statement_list . RBRACE
+   24             | IF LPAREN condition RPAREN LBRACE statement_list . RBRACE ELSE LBRACE statement_list RBRACE
+
+    RBRACE  shift, and go to state 94
+
+
+state 91
+
+   25 loop_statement: FOR ID COLON ID LBRACE statement_list . RBRACE
+
+    RBRACE  shift, and go to state 95
+
+
+state 92
+
+   26 loop_statement: WHILE LPAREN condition RPAREN LBRACE statement_list . RBRACE
+
+    RBRACE  shift, and go to state 96
+
+
+state 93
+
+   20 array_dimensions: LBRACKET NUMBER RBRACKET array_dimensions .
+
+    $default  reduce using rule 20 (array_dimensions)
+
+
+state 94
+
+   23 if_statement: IF LPAREN condition RPAREN LBRACE statement_list RBRACE .
+   24             | IF LPAREN condition RPAREN LBRACE statement_list RBRACE . ELSE LBRACE statement_list RBRACE
+
+    ELSE  shift, and go to state 97
+
+    $default  reduce using rule 23 (if_statement)
+
+
+state 95
+
+   25 loop_statement: FOR ID COLON ID LBRACE statement_list RBRACE .
+
+    $default  reduce using rule 25 (loop_statement)
+
+
+state 96
+
+   26 loop_statement: WHILE LPAREN condition RPAREN LBRACE statement_list RBRACE .
+
+    $default  reduce using rule 26 (loop_statement)
+
+
+state 97
+
+   24 if_statement: IF LPAREN condition RPAREN LBRACE statement_list RBRACE ELSE . LBRACE statement_list RBRACE
+
+    LBRACE  shift, and go to state 98
+
+
+state 98
+
+   24 if_statement: IF LPAREN condition RPAREN LBRACE statement_list RBRACE ELSE LBRACE . statement_list RBRACE
+
+    ID     shift, and go to state 1
+    VAR    shift, and go to state 2
+    IF     shift, and go to state 3
+    FOR    shift, and go to state 4
+    WHILE  shift, and go to state 5
+    PRINT  shift, and go to state 6
+
+    $default  reduce using rule 3 (statement_list)
+
+    statement_list        go to state 99
+    statement             go to state 9
+    variable_declaration  go to state 10
+    assignment            go to state 11
+    if_statement          go to state 12
+    loop_statement        go to state 13
+    print_statement       go to state 14
+
+
+state 99
+
+   24 if_statement: IF LPAREN condition RPAREN LBRACE statement_list RBRACE ELSE LBRACE statement_list . RBRACE
+
+    RBRACE  shift, and go to state 100
+
+
+state 100
+
+   24 if_statement: IF LPAREN condition RPAREN LBRACE statement_list RBRACE ELSE LBRACE statement_list RBRACE .
+
+    $default  reduce using rule 24 (if_statement)

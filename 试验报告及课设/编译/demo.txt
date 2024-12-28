@@ -1,7 +1,0 @@
-var a,aa int
-a=2
-if(a==3){a=4}
-if(2==2){aa=5}
-while(1==2){a=9}
-print("abc")
-print(asd)

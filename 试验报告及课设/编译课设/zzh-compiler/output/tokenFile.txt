@@ -1,0 +1,89 @@
+line           token          name           
+1              no meaning     //this is declaration
+2              Key Word       var            
+2              ID             x              
+2              Specail Word   ,              
+2              ID             a              
+2              Specail Word   ,              
+2              ID             y              
+2              Key Word       int            
+3              Key Word       var            
+3              ID             str            
+3              Key Word       string         
+4              Key Word       var            
+4              ID             a              
+4              Key Word       int            
+5              Key Word       var            
+5              ID             i              
+5              Key Word       int            
+6              Key Word       var            
+6              ID             aa             
+6              Key Word       int            
+6              Specail Word   [              
+6              NUM            5              
+6              Specail Word   ]              
+6              Specail Word   [              
+6              NUM            6              
+6              Specail Word   ]              
+7              no meaning     //this is assignment
+8              ID             str            
+8              Operator       =              
+8              STR            abcbd          
+9              ID             a              
+9              Operator       =              
+9              NUM            10             
+10             ID             x              
+10             Operator       =              
+10             NUM            20             
+10             Operator       +              
+10             ID             b              
+10             Operator       *              
+10             NUM            2              
+11             no meaning     //this is if   
+12             Key Word       if             
+12             Specail Word   (              
+12             ID             a              
+12             Operator       ==             
+12             NUM            10             
+12             Specail Word   )              
+12             Specail Word   {              
+13             ID             a              
+13             Operator       =              
+13             ID             a              
+13             Operator       +              
+13             NUM            10             
+14             Key Word       print          
+14             Specail Word   (              
+14             ID             a              
+14             Specail Word   )              
+15             Key Word       print          
+15             Specail Word   (              
+15             ID             a              
+15             Operator       *              
+15             NUM            10             
+15             Specail Word   )              
+16             Specail Word   }              
+16             Key Word       else           
+16             Specail Word   {              
+17             ID             x              
+17             Operator       =              
+17             ID             x              
+17             Operator       /              
+17             NUM            10             
+18             Key Word       print          
+18             Specail Word   (              
+18             ID             x              
+18             Specail Word   )              
+19             Key Word       print          
+19             Specail Word   (              
+19             STR            i love         
+19             Operator       -              
+19             STR             o             
+19             Specail Word   )              
+20             Specail Word   }              
+21             Key Word       print          
+21             Specail Word   (              
+21             STR            i love compiler
+21             Operator       -              
+21             STR            o              
+21             Specail Word   )              

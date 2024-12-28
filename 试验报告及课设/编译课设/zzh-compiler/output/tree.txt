@@ -1,0 +1,87 @@
+id_list --> y
+id_list --> a , id_list
+id_list --> x , id_list
+type --> int
+variable_declaration --> var id_list type
+statement --> variable_declaration
+id_list --> str
+type --> string
+variable_declaration --> var id_list type
+statement --> variable_declaration
+id_list --> a
+type --> int
+variable_declaration --> var id_list type
+statement --> variable_declaration
+id_list --> i
+type --> int
+variable_declaration --> var id_list type
+statement --> variable_declaration
+id_list --> aa
+array_dimensions --> [ 6 ]
+array_dimensions --> [ 5 ] array_dimensions
+type --> int array_dimensions
+variable_declaration --> var id_list type
+statement --> variable_declaration
+expression2 --> abcbd
+assignment --> str = expression
+statement --> assignment
+expression --> 10
+assignment --> a = expression
+statement --> assignment
+expression --> 20
+expression --> b
+expression --> 2
+expression --> expression * expression
+expression --> expression + expression
+assignment --> x = expression
+statement --> assignment
+expression --> a
+expression --> 10
+condition --> expression == expression
+expression --> a
+expression --> 10
+expression --> expression + expression
+assignment --> a = expression
+statement --> assignment
+expression --> a
+statement --> print_statement
+expression --> a
+expression --> 10
+expression --> expression * expression
+statement --> print_statement
+statement_list --> ε
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+expression --> x
+expression --> 10
+expression --> expression / expression
+statement --> assignment
+expression --> x
+statement --> print_statement
+expression2 --> i love
+expression2 -->  o
+expression2 --> expression2 - expression2
+statement --> print_statement
+statement_list --> ε
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+if_statement --> if ( condition ) { statement_list } else { statement_list }
+statement --> if_statement
+expression2 --> i love compiler
+expression2 --> o
+expression2 --> expression2 - expression2
+statement --> print_statement
+statement_list --> ε
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+statement_list --> statement statement_list
+program --> statement_list

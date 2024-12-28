@@ -1,0 +1,6 @@
+name            type            value          
+i               int             0              
+str             string          abcbd          
+y               int             0              
+a               int             20             
+x               int             7680692        

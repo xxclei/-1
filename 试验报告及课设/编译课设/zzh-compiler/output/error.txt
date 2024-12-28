@@ -1,0 +1,2 @@
+error: a is already declared at line: 4
+b is not defined at line: 10
