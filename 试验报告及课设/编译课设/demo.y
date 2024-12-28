@@ -246,6 +246,7 @@ expression2:
         $$ = string_subtract($1, $3);  // 减去字符串
     }
     | STR {
+        
         fprintf(treeFile, "expression --> STRING: %s\n", $1);
         $$ = $1;  // 直接返回字符串
     }
