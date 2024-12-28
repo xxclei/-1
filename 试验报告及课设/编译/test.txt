@@ -1,0 +1,15 @@
+{Test Token}
+if id = 0 then
+	read(id);
+else
+	write(id);
+endif;
+
+{Test Error}
+错误^_^
+
+{Test Repeat}
+num := 20;
+repeat
+	num := id - 1;
+until num<10;
