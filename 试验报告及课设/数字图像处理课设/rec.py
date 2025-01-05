@@ -6,8 +6,8 @@ import os
 import matplotlib.pyplot as plt
 
 # 获取目标文件夹路径
-input_folder = r'project\1'  # 替换为你的图片文件夹路径
-output_folder = 'output_folder_10cxs'  # 替换为输出文件夹路径
+input_folder = r'project\output'  # 替换为你的图片文件夹路径
+output_folder = 'output_folder_strethened'  # 替换为输出文件夹路径
 
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
@@ -29,11 +29,11 @@ for image_file in image_files:
     edges = cv2.Canny(blurred, 50, 100)  # 增加Canny阈值来减少边缘数量
 
     # SLIC超像素分割（减少超像素数量以减少边缘）
-    segments = slic(image, n_segments=200, compactness=30, sigma=1)  # 减少n_segments和增加compactness来合并超像素
+    segments = slic(image, n_segments=350, compactness=20, sigma=1)  # 减少n_segments和增加compactness来合并超像素
     slic_colored = color.label2rgb(segments, image, kind='avg')
 
     # N-cut方法（模拟）
-    ncut_segments = segmentation.slic(image, n_segments=100, compactness=20)  # 减少n_segments来减少分割的数量
+    ncut_segments = segmentation.slic(image, n_segments=350, compactness=20)  # 减少n_segments来减少分割的数量
     ncut_colored = color.label2rgb(ncut_segments, image, kind='avg')
 
     # 分水岭算法 (基于标记的分水岭)

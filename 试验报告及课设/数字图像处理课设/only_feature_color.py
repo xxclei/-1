@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from skimage.segmentation import slic
+from skimage.segmentation import slic, mark_boundaries
 from skimage import color
 from sklearn.cluster import KMeans
 import os
@@ -9,8 +9,8 @@ from skimage.feature import graycomatrix, graycoprops
 from skimage import morphology
 
 # 获取目标文件夹路径
-input_folder = 'project\\1'  # 替换为你的图片文件夹路径
-output_folder = 'output_folder3_mul'  # 替换为输出文件夹路径
+input_folder = 'project\\output'  # 替换为你的图片文件夹路径
+output_folder = 'output_intretst'  # 替换为输出文件夹路径
 
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
@@ -45,21 +45,18 @@ def extract_features(image, segments):
         perimeter = sum(cv2.arcLength(contour, True) for contour in contours)
         
         # 调整特征重要性
-        # 调整特征重要性
         # 颜色均值权重
-
-        weighted_mean_color = mean_color * 0.5
+        weighted_mean_color = mean_color * 5
         # 纹理特征权重：对比度
-        weighted_contrast = contrast * 1.5
+        weighted_contrast = contrast *2
         # 纹理特征权重：同质性
-        weighted_homogeneity = homogeneity * 2
+        weighted_homogeneity = homogeneity * 2 * 2
         # 边缘信息权重：边缘幅度
-        weighted_edge_magnitude = np.mean(edge_magnitude) * 1.0
+        weighted_edge_magnitude = np.mean(edge_magnitude) * 1.0 * 1
         # 形状特征权重：区域面积
-        weighted_area = area * 0.2
+        weighted_area = area * 1.2 * 3
         # 形状特征权重：周长
-        weighted_perimeter = perimeter * 0.8
-
+        weighted_perimeter = perimeter *2
 
         # 将所有特征组合在一起
         features.append(np.concatenate((weighted_mean_color, [weighted_contrast, weighted_homogeneity], [weighted_edge_magnitude, weighted_area, weighted_perimeter])))
@@ -73,7 +70,7 @@ for image_file in image_files:
     image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # 转为RGB格式
     
     # 使用SLIC进行超像素分割
-    segments = slic(image_rgb, n_segments=100, compactness=20, sigma=1)
+    segments = slic(image_rgb, n_segments=350, compactness=25.0, sigma=1)
     
     # 提取每个超像素的特征
     features = extract_features(image_rgb, segments)
@@ -91,17 +88,26 @@ for image_file in image_files:
         mask = segments == label
         segmented_image[mask] = np.array([255 * (labels[i] == 0), 255 * (labels[i] == 1), 255 * (labels[i] == 2)], dtype=np.uint8)
     
-    # 可视化每一张图片的前后对比图（四个子图）
-    plt.figure(figsize=(15, 15))
+    # 在原始图像上绘制超像素边界
+    boundaries_image = mark_boundaries(image_rgb, segments, color=(0, 0, 0))
+
+    # 可视化每一张图片的前后对比图（三个子图）
+    plt.figure(figsize=(15, 5))
 
     # 处理前图像展示
-    plt.subplot(2, 2, 1)
+    plt.subplot(1, 3, 1)
     plt.imshow(image_rgb)
     plt.title("Original Image")
     plt.axis('off')  # 关闭坐标轴
 
-    # 处理后图像展示 - 超像素边缘
-    plt.subplot(2, 2, 2)
+    # 超像素边界图像展示
+    plt.subplot(1, 3, 2)
+    plt.imshow(boundaries_image)
+    plt.title("Superpixel Boundaries")
+    plt.axis('off')  # 关闭坐标轴
+
+    # 处理后图像展示 - 超像素分割
+    plt.subplot(1, 3, 3)
     plt.imshow(segmented_image)
     plt.title("Segmented Image")
     plt.axis('off')  # 关闭坐标轴
